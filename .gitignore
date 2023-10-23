@@ -492,3 +492,5 @@ pyrightconfig.json
 **/examples/
 /test/
 /models/
+/src/FunASR/
+/src/espnet/
