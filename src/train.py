@@ -4,10 +4,10 @@ import os
 
 os.system(
     'python3 ./transformers/examples/pytorch/speech_recognition/run_speech_recognition_seq2seq.py '
-    '--model_name_or_path="openai/whisper-medium" --dataset_path="../datasets/Common_Voice_Corpus_15" '
+    '--model_name_or_path="openai/whisper-small" --dataset_path="../datasets/Common_Voice_Corpus_15" '
     '--dataset_config_name="fa" --language="persian" --train_split_name="train+validation" --eval_split_name="test" '
-    '--max_steps="5000" --output_dir="./whisper-medium-fa" --per_device_train_batch_size="16" '
-    '--gradient_accumulation_steps="2" --per_device_eval_batch_size="16" --logging_steps="25" --learning_rate="1e-5" '
+    '--max_steps="5000" --output_dir="./whisper-small-fa" --per_device_train_batch_size="10" '
+    '--gradient_accumulation_steps="2" --per_device_eval_batch_size="8" --logging_steps="25" --learning_rate="1e-5" '
     '--warmup_steps="50" --evaluation_strategy="steps" --eval_steps="100" --save_strategy="steps" '
     '--save_steps="100" --generation_max_length="225" --preprocessing_num_workers="16" '
     '--length_column_name="input_length" --max_duration_in_seconds="30" --text_column_name="sentence" '
