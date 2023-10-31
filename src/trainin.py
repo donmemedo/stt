@@ -72,9 +72,9 @@ def prepare_dataset(examples):
 
     return examples
 print("yaboooo")
-train_dataset = train_dataset.map(prepare_dataset, num_proc=4)
+train_dataset = train_dataset.map(prepare_dataset, num_proc=1)
 print("yaboooo")
-test_dataset = test_dataset.map(prepare_dataset, num_proc=4)
+test_dataset = test_dataset.map(prepare_dataset, num_proc=1)
 
 import torch
 
