@@ -58,9 +58,9 @@ def prepare_dataset(examples):
 
     audio = examples["audio"]
 
-    examples["input_features"] = feature_extractor( audio["array"], sampling_rate=16000).input_features[0]
+    examples["input_features"] = feature_extractor( audio , sampling_rate=16000).input_features[0]
 
-    del examples["audio"]
+    # del examples["audio"]
 
     sentences = examples["sentence"]
 
@@ -68,7 +68,7 @@ def prepare_dataset(examples):
 
     examples["labels"] = tokenizer(sentences).input_ids
 
-    del examples["sentence"]
+    # del examples["sentence"]
 
     return examples
 print("yaboooo")
@@ -144,20 +144,20 @@ model.config.suppress_tokens = []
 
 from transformers import Seq2SeqTrainingArguments
 
-training_args = Seq2SeqTrainingArguments(output_dir="./whisper-small-fa",  # change to a repo name of your choice
-    per_device_train_batch_size=10,
-    gradient_accumulation_steps=2,  # increase by 2x for every 2x decrease in batch size
+training_args = Seq2SeqTrainingArguments(output_dir="./whisper-small-farsi",  # change to a repo name of your choice
+    per_device_train_batch_size=14,
+    gradient_accumulation_steps=4,  # increase by 2x for every 2x decrease in batch size
     learning_rate=1e-5,
-    warmup_steps=500,
-    max_steps=15000,
+    warmup_steps=50,
+    max_steps=5000,
     gradient_checkpointing=True,
     fp16=True,
     evaluation_strategy="steps",
-    per_device_eval_batch_size=1,
+    per_device_eval_batch_size=10,
     predict_with_generate=True,
     generation_max_length=225,
-    save_steps=500,
-    eval_steps=500,
+    save_steps=100,
+    eval_steps=100,
     # logging_steps=25,
     report_to=["tensorboard"],
     load_best_model_at_end=True,
