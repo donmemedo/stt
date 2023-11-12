@@ -40,7 +40,7 @@ test_df["audio"] = audio2
 
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
-feature_extractor = WhisperFeatureExtractor.from_pretrained("openai/whisper-small")
+feature_extractor = WhisperFeatureExtractor.from_pretrained("makhataei/Whisper-Small-Common-Voice")
 
 ## Load WhisperTokenizer
 tokenizer = WhisperTokenizer.from_pretrained(
@@ -128,7 +128,7 @@ def compute_metrics(pred):
     return {"wer": wer}
 
 
-model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-small")
+model = WhisperForConditionalGeneration.from_pretrained("makhataei/Whisper-Small-Common-Voice")
 model.config.forced_decoder_ids = None
 model.config.suppress_tokens = []
 
@@ -146,8 +146,8 @@ training_args = Seq2SeqTrainingArguments(
     per_device_eval_batch_size=10,
     predict_with_generate=True,
     generation_max_length=225,
-    save_steps=100,
-    eval_steps=100,
+    save_steps=200,
+    eval_steps=200,
     logging_steps=25,
     report_to=["tensorboard"],
     load_best_model_at_end=True,
@@ -165,13 +165,13 @@ trainer = Seq2SeqTrainer(
     compute_metrics=compute_metrics,
     tokenizer=processor.feature_extractor,
 )
-print("Train Phase Started.")
+print("FineTune Phase Started.")
 trainer.train()
 trainer.create_model_card(
     language="fa",
     tags ="fa-asr",
     model_name="Whisper Small Persian",
-    finetuned_from="openai/whisper-small",
+    finetuned_from="makhataei/Whisper-Small-Common-Voice",
     tasks="transcribe",
     dataset_tags="mozilla-foundation/common_voice_15_0",
     dataset="Common Voice 15.0",
@@ -183,7 +183,7 @@ kwargs = {
     "dataset_args": "config: fa, split: train,test",
     "language": "fa",
     "model_name": "Whisper Small Persian",
-    "finetuned_from": "openai/whisper-small",
+    "finetuned_from": "makhataei/Whisper-Small-Common-Voice",
     "tasks": "transcribe",
     "tags": "fa-asr",
 }
