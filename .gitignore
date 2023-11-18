@@ -495,3 +495,5 @@ pyrightconfig.json
 /src/FunASR/
 /src/espnet/
 /datasets/
+/tmp/
+/src/tmp/
