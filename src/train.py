@@ -1,3 +1,5 @@
+# import cudf.pandas
+# cudf.pandas.install()
 from datasets import Dataset
 import pandas as pd
 import librosa
@@ -24,7 +26,7 @@ new_session=True,
 write_permission=True
 )
 ## we will load the both of the data here.
-train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train.csv")
+train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train1.csv")
 test_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/test.csv")
 PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_15/fa/clips/"
 
@@ -134,7 +136,7 @@ model.config.suppress_tokens = []
 
 # Define the Training Arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir="./Whisper-Small-Common-Voice",
+    output_dir="/media/makhataei/Backups/Whisper-Small-Common-Voice",
     per_device_train_batch_size=14,
     gradient_accumulation_steps=4,
     learning_rate=1e-5,
