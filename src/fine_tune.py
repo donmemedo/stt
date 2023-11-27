@@ -26,7 +26,7 @@ new_session=True,
 write_permission=True
 )
 ## we will load the both of the data here.
-train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train2.csv")
+train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train.csv")
 test_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/test.csv")
 PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_15/fa/clips/"
 
@@ -136,21 +136,23 @@ model.config.suppress_tokens = []
 
 # Define the Training Arguments
 training_args = Seq2SeqTrainingArguments(
-    output_dir="/media/makhataei/Backups/Whisper-Small-Common-Voice",
+    f"Whisper-Small-Common-Voice",
+    # output_dir="/media/makhataei/Backups/Whisper-Small-Common-Voice",
     per_device_train_batch_size=14,
     gradient_accumulation_steps=4,
-    learning_rate=1e-5,
-    warmup_steps=50,
+    learning_rate=1e-6,
+    warmup_steps=500,
     max_steps=10000,
     gradient_checkpointing=True,
-    fp16=True,
+    # fp16=True,
     evaluation_strategy="steps",
-    per_device_eval_batch_size=10,
+    per_device_eval_batch_size=14,
     predict_with_generate=True,
     generation_max_length=225,
     save_steps=100,
     eval_steps=100,
     logging_steps=25,
+    save_total_limit=3,
     report_to=["tensorboard"],
     load_best_model_at_end=True,
     metric_for_best_model="wer",

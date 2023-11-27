@@ -1,0 +1,525 @@
+ ******************************************
+ امروز رفتیم و کارت بانکیش رو بهمون داد تامشکلمون روحل کنیم بدون اینکه هیچ چک یا نوشته ای ازمون بگیره
+ ******************************************
+inference time for cuda in base-Model is 1706 milliseconds: 
+ امورز رفتیم اکارتبان کشب ایمون دتا ماشکلمون احال کنیب بیدون اینکی هی چک یا نیوشتی ازامل به گیر
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1856 milliseconds: 
+ ام روز رفتیم و کارتو بانکشو به امون داد تا مشکل امون هلکانیم بدون اینکه هیچ چک یا نوشتی یا زمون بگیره
+
+ ------------------------------------------
+
+inference time for cuda in base-Model is 1524 milliseconds: 
+ امورز رفتیم اکارتبان کشب ایمون دتا ماشکلمون احال کنیب بیدون اینکی هی چک یا نیوشتی ازامل به گیر
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1880 milliseconds: 
+ ام روز رفتیم و کارتو بانکشو به امون داد تا مشکل امون هلکانیم بدون اینکه هیچ چک یا نوشتی یا زمون بگیره
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 5050 milliseconds: 
+ امروز رفتم و کارتو بانکشو به امون داد تا مشکلمون را حل کنیم بدون اینکه هیچ چک یا نوشتیی از امون بگیره
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 1541 milliseconds: 
+ امورز رفتیم اکارتبان کشب ایمون دتا ماشکلمون احال کنیب بیدون اینکی هی چک یا نیوشتی ازامل به گیر
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 4233 milliseconds: 
+ ام روز رفتیم و کارتو بانکشو به امون داد تا مشکل امون هلکانیم بدون اینکه هیچ چک یا نوشتی یا زمون بگیره
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 13708 milliseconds: 
+ امروز رفتم و کارتو بانکشو به امون داد تا مشکلمون را حل کنیم بدون اینکه هیچ چک یا نوشتیی از امون بگیره
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 25826 milliseconds: 
+ امروز رفتم و کارت و بانکشو به امان داد تا مشکلمون ها حل کنیم بدون ان که هیچ چیک یا نوشتهیی از امان بگیره
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 26346 milliseconds: 
+ امروز رفتیم و کارت و بنکش رو به منون داد تا مشکل منو حل کنیم بدون این که هیچ چیک یا نوشته یه زمان بگیره.
+
+ ------------------------------------------
+
+inference time for cuda in base-Model is 800 milliseconds: 
+ asi asiaby punkiem każde
+
+ ------------------------------------------
+  ******************************************
+ از حساب بانکیم کم بشه؟
+ ******************************************
+ 
+inference time for cuda in small-Model is 1269 milliseconds: 
+ از حساب بنکیم کنمشه
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 4030 milliseconds: 
+ از حساب بانگی می کم بشه
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 2606 milliseconds: 
+ Spr机到 James'ała
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3028 milliseconds: 
+ از حساب بنکیم کنمشه
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 10149 milliseconds: 
+ از حساب بانگی می کم بشه
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 20607 milliseconds: 
+ از حساب بانکیم کم میشه
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 20114 milliseconds: 
+ از حساب بانکی ایم کم بشه
+
+ ------------------------------------------
+
+ ******************************************
+ نزدیک اینجا بانک وجود دارد؟
+ ******************************************
+inference time for cuda in base-Model is 924 milliseconds: 
+ Najnecik changing banki kocut da ar ant
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1420 milliseconds: 
+ نزی که اینجا بام کی وجود دارد
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3987 milliseconds: 
+ نزدیک اینجا بانک وجود دارد
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 2986 milliseconds: 
+ Eğ El trivial ani
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3297 milliseconds: 
+ نزی که اینجا بام کی وجود دارد
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 9958 milliseconds: 
+ نزدیک اینجا بانک وجود دارد
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 20061 milliseconds: 
+ نزدیک اینجا بانکی وجود دارد
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 19383 milliseconds: 
+ نزدیک اینجا بانک وجود دارد
+
+ ------------------------------------------
+
+ ******************************************
+ ممکنه لطفاً یک گواهی ریز حساب بانکی بدهید؟
+ ******************************************
+inference time for cuda in base-Model is 880 milliseconds: 
+ Donc elle nous nous finit d'y avoir y agissé à sauver pour incuber des huit.
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 2398 milliseconds: 
+ Vanről azt vegyek kovaiják ourkárn customize-jit rangurját keresd találnak?
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 4213 milliseconds: 
+ من کنی روستفن یک قبایی ریز هساب با اینکی بدهید
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 3772 milliseconds: 
+ Madame Qu Gravity Nordvernier, Cover-y et Jниц est en Igor, Place de Marie-Soureuse
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 11081 milliseconds: 
+ Márksz kén FERNJ不能unk námarok sor segu's
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 11133 milliseconds: 
+ من کنی روستفن یک قبایی ریز هساب با اینکی بدهید
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 22244 milliseconds: 
+ ممکن رو تفنج کوایی ریز حساب با انکی بیدهید
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 21311 milliseconds: 
+ ممکنه رسفنگی کوبایی ریز حساب با اینکی بدهید
+
+ ------------------------------------------
+
+ ******************************************
+ این بانک برای همیشه بسته شده است.
+ ******************************************
+inference time for cuda in base-Model is 789 milliseconds: 
+ این بانک برای حمیشه بستشو دست
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1291 milliseconds: 
+ این بانک برای همیشه بستشد است.
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 4146 milliseconds: 
+ این بانک برای همیشه بست شده است.
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 962 milliseconds: 
+ این بانک برای حمیشه بستشو دست
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3110 milliseconds: 
+ این بانک برای همیشه بستشد است.
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 10315 milliseconds: 
+ این بانک برای همیشه بست شده است.
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 20882 milliseconds: 
+ این بانک برای همیشه بسته شده است.
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 20150 milliseconds: 
+ این بانک برای همیشه بسته شده است.
+
+ ------------------------------------------
+
+ ******************************************
+ برای شما همیشه در بانک ما شغل وجود دارد.
+ ******************************************
+inference time for cuda in base-Model is 1247 milliseconds: 
+ بیرhoی شو مهم یشی در بانک موش وهو بجودور
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1306 milliseconds: 
+ ورای شما همیشی در بانک ماشه ووجود داره
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3819 milliseconds: 
+ برای شما همیشه در بانک ما شوال وجود داره
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 3836 milliseconds: 
+ apparور شمح منش domestic بتابیظ Twenty Rec<|ar|>
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3361 milliseconds: 
+ ورای شما همیشی در بانک ماشه ووجود داره
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 10722 milliseconds: 
+ برای شما همیشه در بانک ما شوال وجود داره
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 21609 milliseconds: 
+ برای شما همیشه در بانکه ما شاول وجود داره
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 20298 milliseconds: 
+ برای شما همیشه در بانک ما شغل وجود داره
+
+ ------------------------------------------
+
+ ******************************************
+ به منظور تقویت اقتصاد کشور، دولت از بانکها وام گرفت.
+ ******************************************
+inference time for cuda in base-Model is 836 milliseconds: 
+ به من زورت هرویت ایخ تستادکشور دولت از بنکا وامگی رفت
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1399 milliseconds: 
+ بمنزور تحوییت اختصاد کشور دولت از بانکا وامیر افتراری برده
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3863 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانکا وام گرفت
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 1209 milliseconds: 
+ به من زورت هرویت ایخ تستادکشور دولت از بنکا وامگی رفت
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3864 milliseconds: 
+ بمنزور تحوییت اختصاد کشور دولت از بانکا وامیر افتراری برده
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 10997 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانکا وام گرفت
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 22736 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانک ها وام گرفت
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 21677 milliseconds: 
+ به منظور تقوییت اقتصاد کشور دولت از بانکا وام گرفت
+
+ ------------------------------------------
+
+ ******************************************
+ از بانک وام گرفتن
+ ******************************************
+inference time for cuda in base-Model is 970 milliseconds: 
+ I'm inல
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1610 milliseconds: 
+ That's Bank Room 15
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 4004 milliseconds: 
+ از باقی که واهم گرفتن.
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 2613 milliseconds: 
+ As<|bg|>
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 7824 milliseconds: 
+ As Bank of autism
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 9985 milliseconds: 
+ از باقی که واهم گرفتن
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 19542 milliseconds: 
+ از بانک رو هم گرفتن.
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 18766 milliseconds: 
+ از بانک وام گرفتن
+
+ ------------------------------------------
+
+ ******************************************
+ حساب بانکی خود را بستم.
+ ******************************************
+inference time for cuda in base-Model is 762 milliseconds: 
+ Słabe banki chodź na bestem.
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1258 milliseconds: 
+ ساب بانکی خود را بستم
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3750 milliseconds: 
+ از حساب بانکی خود را بستم
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 919 milliseconds: 
+ Słabe banki chodź na bestem.
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 2997 milliseconds: 
+ ساب بانکی خود را بستم
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 10047 milliseconds: 
+ از حساب بانکی خود را بستم
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 19499 milliseconds: 
+ نساب بانکی خود را بستم
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 19522 milliseconds: 
+ اصابه بانکی خود را بستم
+
+ ------------------------------------------
+
+ ******************************************
+ چکهای بانکی اختصاصی که نام و نشانی شخص روی آن چاپ شده است
+ ******************************************
+inference time for cuda in base-Model is 845 milliseconds: 
+ چکای بنکی ایخ تساسی کنامونشانی شخص رویان چاب شدست.
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1364 milliseconds: 
+ چکای بانکی اختصاصی که نام و نشانی شخص رویان چاب شد است.
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3962 milliseconds: 
+ چک های بانکی اختصاسی که نامونشانی شخص روی آن چب شده است
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 1207 milliseconds: 
+ چکای بنکی ایخ تساسی کنامونشانی شخص رویان چاب شدست.
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3679 milliseconds: 
+ چکای بانکی اختصاصی که نام و نشانی شخص رویان چاب شد است.
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 11448 milliseconds: 
+ چک های بانکی اختصاسی که نامونشانی شخص روی آن چب شده است
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 22805 milliseconds: 
+ چکهای بانکی اختصاصی که نام و نشانی شخص روی های چپ شده است
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 22610 milliseconds: 
+ چکه های بانکی اقتصاسی که نام و نشانی شخص روی آن چاب شده است.
+
+ ------------------------------------------
+
+ ******************************************
+ آیا بانک سپه متعلق به سپاه است؟
+ ******************************************
+inference time for cuda in base-Model is 777 milliseconds: 
+ ويو بونك السبح متعلق بالسبح هس
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1283 milliseconds: 
+ هل يوجد سفاة متعلقة بالسفاة؟
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3783 milliseconds: 
+ هایا بانک سپه متعلق به سپه هست؟
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 1001 milliseconds: 
+ ويو بونك السبح متعلق بالسبح هس
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3101 milliseconds: 
+ هل يوجد سفاة متعلقة بالسفاة؟
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 10529 milliseconds: 
+ هایا بانک سپه متعلق به سپه هست؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 20386 milliseconds: 
+ هایا بانک سپه متعلق به سپا هست؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 19772 milliseconds: 
+ هاییا بانک سپه متعلق به سپاه است؟
+
+ ------------------------------------------
+
+ ******************************************
+ چک بانکی با اسم شخص
+ ******************************************
+inference time for cuda in base-Model is 1052 milliseconds: 
+ למה בתאצל אגarde瞎ס ומיעצם int
+
+ ------------------------------------------
+
+inference time for cuda in small-Model is 1270 milliseconds: 
+ چکی بانکی با اسم شخص
+
+ ------------------------------------------
+
+inference time for cuda in medium-Model is 3776 milliseconds: 
+ Check your monkey by its mishaps.
+
+ ------------------------------------------
+
+inference time for cpu in base-Model is 2769 milliseconds: 
+ ווכןרהili annéesי מהפע PBS.
+
+ ------------------------------------------
+
+inference time for cpu in small-Model is 3074 milliseconds: 
+ چکی بانکی با اسم شخص
+
+ ------------------------------------------
+
+inference time for cpu in medium-Model is 9724 milliseconds: 
+ Check your monkey by its mishaps.
+
+ ------------------------------------------
+
+inference time for cpu in large-v1-Model is 19578 milliseconds: 
+ چکبان کی با اسم شخص؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v2-Model is 19275 milliseconds: 
+ چکه بانکی با اسم شخص
+
+ ---------------------
