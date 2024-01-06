@@ -1,7 +1,7 @@
 from transformers import pipeline
-import gradio as gr
+# import gradio as gr
 
-MODEL = "../models/checkpoint-1100/config.json"
+MODEL = "../models/1-checkpoint-1100/config.json"
 AUDIO = "../test/Tehran_Namaesh0_5.wav"
 import time
 import whisper
