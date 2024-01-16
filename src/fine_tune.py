@@ -26,9 +26,9 @@ new_session=True,
 write_permission=True
 )
 ## we will load the both of the data here.
-train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train.csv")
-test_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/test.csv")
-PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_15/fa/clips/"
+train_df = pd.read_csv("../datasets/Common_Voice_Corpus_16/fa/train.csv", on_bad_lines='skip')
+test_df = pd.read_csv("../datasets/Common_Voice_Corpus_16/fa/test.csv", on_bad_lines='skip')
+PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_16/fa/clips/"
 
 audio1 = []
 for i in list(train_df.path):
@@ -177,13 +177,13 @@ trainer.create_model_card(
     model_name="Whisper Small Persian",
     finetuned_from="makhataei/Whisper-Small-Common-Voice",
     tasks="transcribe",
-    dataset_tags="mozilla-foundation/common_voice_15_0",
-    dataset="Common Voice 15.0",
+    dataset_tags="mozilla-foundation/common_voice_16_0",
+    dataset="Common Voice 16.0",
     dataset_args="config: fa, split: train,test",
 )
 kwargs = {
-    "dataset_tags": "mozilla-foundation/common_voice_15_0",
-    "dataset": "Common Voice 15.0",
+    "dataset_tags": "mozilla-foundation/common_voice_16_0",
+    "dataset": "Common Voice 16.0",
     "dataset_args": "config: fa, split: train,test",
     "language": "fa",
     "model_name": "Whisper Small Persian",
