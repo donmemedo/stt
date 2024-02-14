@@ -25,11 +25,12 @@ for AUDIO in [
     print(AUDIO,"-------------------- \n")
     for typo in ["cuda", "cpu"]:
         for size in ["base", "small", "medium", "large-v1", "large-v2"]:
-            start = int(1000*time.time())
+
             try:
                 model = whisper.load_model(name=size, device=typo)
             except:
                 break
+            start = int(1000*time.time())
             result = model.transcribe(AUDIO)
             end = int(1000*time.time())
             my_file.writelines("---------------------\n\n")
