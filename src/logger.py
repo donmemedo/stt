@@ -45,7 +45,7 @@ log_config = {
         },
     },
     "loggers": {
-        "chatbot": {
+        "stt": {
             # "handlers": ["splunk", "default"],
             "handlers": ["default"],
             "level": "DEBUG",
@@ -66,4 +66,4 @@ log_config = {
 }
 
 dictConfig(log_config)
-logger = logging.getLogger("chatbot")
+logger = logging.getLogger("stt")

@@ -2,7 +2,7 @@
 # cudf.pandas.install()
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
-
+from config import settings
 import evaluate
 import librosa
 import pandas as pd
@@ -26,10 +26,13 @@ login(
     write_permission=True,
 )
 ## we will load the both of the data here.
-train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train1.csv")
-test_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/test.csv")
-PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_15/fa/clips/"
-
+train_df = pd.read_csv(
+    "../datasets/Common_Voice_Corpus_16/fa/train.csv", on_bad_lines="skip"
+)
+test_df = pd.read_csv(
+    "../datasets/Common_Voice_Corpus_16/fa/test.csv", on_bad_lines="skip"
+)
+PATH = "../datasets/Common_Voice_Corpus_16/fa/clips/"
 audio1 = []
 for i in list(train_df.path):
     audio1.append(librosa.load(path=PATH + i, sr=16000)[0])
@@ -136,9 +139,9 @@ model.config.suppress_tokens = []
 
 # Define the Training Arguments
 training_args = Seq2SeqTrainingArguments(
-    f"Whisper-Small-Common-Voice",
-    # output_dir="/media/makhataei/Backups/Whisper-Small-Common-Voice",
-    per_device_train_batch_size=14,
+    # f"Whisper-Small-Common-Voice",
+    output_dir=f"../models/{settings.MODEL}",
+    per_device_train_batch_size=10,
     gradient_accumulation_steps=4,
     learning_rate=1e-6,
     warmup_steps=50,
@@ -146,7 +149,7 @@ training_args = Seq2SeqTrainingArguments(
     gradient_checkpointing=True,
     # fp16=True,
     evaluation_strategy="steps",
-    per_device_eval_batch_size=14,
+    per_device_eval_batch_size=10,
     predict_with_generate=True,
     generation_max_length=225,
     save_steps=100,
@@ -177,12 +180,12 @@ trainer.create_model_card(
     model_name="Whisper Small Persian",
     finetuned_from="openai/whisper-small",
     tasks="transcribe",
-    dataset_tags="mozilla-foundation/common_voice_15_0",
+    dataset_tags="mozilla-foundation/common_voice_16_0",
     dataset="Common Voice 15.0",
     dataset_args="config: fa, split: train,test",
 )
 kwargs = {
-    "dataset_tags": "mozilla-foundation/common_voice_15_0",
+    "dataset_tags": "mozilla-foundation/common_voice_16_0",
     "dataset": "Common Voice 15.0",
     "dataset_args": "config: fa, split: train,test",
     "language": "fa",

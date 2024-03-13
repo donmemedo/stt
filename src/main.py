@@ -38,11 +38,6 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_events():
     logger.info(f"Time of Startup:{jd.now().isoformat()}")
-    # tokenizer = AutoTokenizer.from_pretrained(settings.MODEL)
-    # model = AutoModelForQuestionAnswering.from_pretrained(settings.MODEL)
-    # nlp = pipeline('question-answering', model, tokenizer)
-    # # nlp = pipeline('question-answering', model=settings.MODEL, tokenizer=settings.MODEL)
-    # return model,tokenizer,nlp
     loaders()
     logger.info(f"Ready for Your Questions:{jd.now().isoformat()}")
 
@@ -68,16 +63,10 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
                     break
                 transcript = model.transcribe(AUDIO)
                 end = int(1000 * time.time())
-                # my_file.writelines("---------------------\n\n")
-                # my_file.writelines(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n")
                 response = f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
-                # my_file.writelines(result["text"])
-                # my_file.writelines("\n\n ---------------------")
                 logger.info(
                     f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
                 )
-                # print(result["text"])
-        # my_file.close()
         result = {
             "Transcript": response,
             "File Size": len(file),
@@ -102,16 +91,10 @@ async def create_upload_file(file: UploadFile | None = None):
                     break
                 transcript = model.transcribe(AUDIO)
                 end = int(1000 * time.time())
-                # my_file.writelines("---------------------\n\n")
-                # my_file.writelines(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n")
                 response = f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
-                # my_file.writelines(result["text"])
-                # my_file.writelines("\n\n ---------------------")
                 logger.info(
                     f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
                 )
-                # print(result["text"])
-        # my_file.close()
         result = {
             "Transcript": response,
             "File Name": file.filename,
@@ -137,16 +120,10 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
                 break
             transcript = model.transcribe(AUDIO)
             end = int(1000 * time.time())
-            # my_file.writelines("---------------------\n\n")
-            # my_file.writelines(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n")
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
-            # my_file.writelines(result["text"])
-            # my_file.writelines("\n\n ---------------------")
             logger.info(
                 f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             )
-            # print(result["text"])
-        # my_file.close()
         result = {
             "Transcript": response,
             "File Size": len(file),
@@ -172,16 +149,10 @@ async def create_upload_file(file: UploadFile | None = None):
                 break
             transcript = model.transcribe(AUDIO)
             end = int(1000 * time.time())
-            # my_file.writelines("---------------------\n\n")
-            # my_file.writelines(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n")
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
-            # my_file.writelines(result["text"])
-            # my_file.writelines("\n\n ---------------------")
             logger.info(
                 f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             )
-            # print(result["text"])
-        # my_file.close()
         result = {
             "Transcript": response,
             "File Name": file.filename,
@@ -207,16 +178,10 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
                 break
             transcript = model.transcribe(AUDIO)
             end = int(1000 * time.time())
-            # my_file.writelines("---------------------\n\n")
-            # my_file.writelines(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n")
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
-            # my_file.writelines(result["text"])
-            # my_file.writelines("\n\n ---------------------")
             logger.info(
                 f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             )
-            # print(result["text"])
-        # my_file.close()
         result = {
             "Transcript": response,
             "File Size": len(file),
@@ -242,16 +207,10 @@ async def create_upload_file(file: UploadFile | None = None):
                 break
             transcript = model.transcribe(AUDIO)
             end = int(1000 * time.time())
-            # my_file.writelines("---------------------\n\n")
-            # my_file.writelines(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n")
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
-            # my_file.writelines(result["text"])
-            # my_file.writelines("\n\n ---------------------")
             logger.info(
                 f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             )
-            # print(result["text"])
-        # my_file.close()
         result = {
             "Transcript": response,
             "File Name": file.filename,
@@ -295,74 +254,3 @@ def loaders():
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="0.0.0.0", port=80)
-
-"""
-
-from pyannote.audio import Pipeline
-pipeline = Pipeline.from_pretrained(
-    "pyannote/speaker-diarization-3.0")#,
-    #use_auth_token="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")
-
-# send pipeline to GPU (when available)
-import torch
-pipeline.to(torch.device("cuda"))
-
-# apply pretrained pipeline
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4527484.wav")
-print("----------------------------------4527484.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4527674.wav")
-print("----------------------------------4527674.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4528104.wav")
-print("----------------------------------4528104.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4556868.wav")
-print("----------------------------------4556868.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4557220.wav")
-print("----------------------------------4557220.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-
-
-pipeline.to(torch.device("cpu"))
-
-# apply pretrained pipeline
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4527484.wav")
-print("----------------------------------4527484.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4527674.wav")
-print("----------------------------------4527674.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4528104.wav")
-print("----------------------------------4528104.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4556868.wav")
-print("----------------------------------4556868.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-diarization = pipeline("/home/makhataei/Projects/STT/test/1/4557220.wav")
-print("----------------------------------4557220.wav----------------------------------------")
-# print the result
-for turn, _, speaker in diarization.itertracks(yield_label=True):
-    print(f"start={turn.start:.1f}s stop={turn.end:.1f}s speaker_{speaker}")
-
-
-"""
