@@ -497,3 +497,4 @@ pyrightconfig.json
 /datasets/
 /tmp/
 /src/tmp/
+/src/Whisper-Small-Common-Voice/

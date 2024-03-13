@@ -1,8 +1,15 @@
 # import cudf.pandas
 # cudf.pandas.install()
-from datasets import Dataset
-import pandas as pd
+from dataclasses import dataclass
+from typing import Any, Dict, List, Union
+from config import settings
+import evaluate
 import librosa
+import numpy as np
+import pandas as pd
+import torch
+from datasets import Dataset
+from huggingface_hub import login
 from transformers import (
     WhisperFeatureExtractor,
     WhisperTokenizer,
@@ -11,26 +18,22 @@ from transformers import (
     Seq2SeqTrainer,
     WhisperForConditionalGeneration,
 )
-import torch
-from dataclasses import dataclass
-from typing import Any, Dict, List, Union
-import evaluate
-
-from huggingface_hub import interpreter_login, login
 
 # interpreter_login()
 login(
     token="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",
-add_to_git_credential=True,
-new_session=True,
-write_permission=True
+    add_to_git_credential=True,
+    new_session=True,
+    write_permission=True,
 )
 ## we will load the both of the data here.
-train_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/train.csv")
-test_df = pd.read_csv("../datasets/Common_Voice_Corpus_15/fa/test.csv")
-PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_15/fa/clips/"
-
+PATH = "../datasets/Ctejarat/clips/"
+df = pd.read_csv("../datasets/Ctejarat/STT.csv", on_bad_lines='skip')
+msk = np.random.rand(len(df)) < 0.8
+train_df = df[msk]
+test_df = df[~msk]
 audio1 = []
+
 for i in list(train_df.path):
     audio1.append(librosa.load(path=PATH + i, sr=16000)[0])
 train_df["audio"] = audio1
@@ -42,31 +45,17 @@ test_df["audio"] = audio2
 
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
-feature_extractor = WhisperFeatureExtractor.from_pretrained("makhataei/Whisper-Small-Common-Voice")
+feature_extractor = WhisperFeatureExtractor.from_pretrained(settings.MODEL)
 
 ## Load WhisperTokenizer
-tokenizer = WhisperTokenizer.from_pretrained(
-    "openai/whisper-small", language="Persian", task="transcribe"
-)
+tokenizer = WhisperTokenizer.from_pretrained(settings.MODEL, language="Persian", task="transcribe")
 
 ## Combine To Create A WhisperProcessor
-processor = WhisperProcessor.from_pretrained(
-    "openai/whisper-small", language="Persian", task="transcribe"
-)
+processor = WhisperProcessor.from_pretrained(settings.MODEL, language="Persian", task="transcribe")
 
 
 def prepare_dataset(examples):
     # compute log-Mel input features from input audio array
-    del examples["accents"]
-    del examples["age"]
-    del examples["client_id"]
-    del examples["down_votes"]
-    del examples["gender"]
-    del examples["locale"]
-    del examples["path"]
-    del examples["segment"]
-    del examples["up_votes"]
-
     audio = examples["audio"]
     examples["input_features"] = feature_extractor(
         audio, sampling_rate=16000, max_length=480000
@@ -79,8 +68,8 @@ def prepare_dataset(examples):
     return examples
 
 
-train_dataset = train_dataset.map(prepare_dataset, num_proc=1)
-test_dataset = test_dataset.map(prepare_dataset, num_proc=1)
+train_dataset = train_dataset.map(prepare_dataset, num_proc=4)
+test_dataset = test_dataset.map(prepare_dataset, num_proc=4)
 
 
 @dataclass
@@ -88,7 +77,7 @@ class DataCollatorSpeechSeq2SeqWithPadding:
     processor: Any
 
     def __call__(
-        self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
+            self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
     ) -> Dict[str, torch.Tensor]:
         # split inputs and labels since they have to be of different lengths and need different padding methods
         # first treat the audio inputs by simply returning torch tensors
@@ -130,23 +119,22 @@ def compute_metrics(pred):
     return {"wer": wer}
 
 
-model = WhisperForConditionalGeneration.from_pretrained("makhataei/Whisper-Small-Common-Voice")
+model = WhisperForConditionalGeneration.from_pretrained(settings.MODEL)
 model.config.forced_decoder_ids = None
 model.config.suppress_tokens = []
 
 # Define the Training Arguments
 training_args = Seq2SeqTrainingArguments(
-    f"Whisper-Small-Common-Voice",
-    # output_dir="/media/makhataei/Backups/Whisper-Small-Common-Voice",
-    per_device_train_batch_size=14,
-    gradient_accumulation_steps=4,
-    learning_rate=1e-6,
-    warmup_steps=500,
-    max_steps=10000,
+    output_dir=f"../models/{settings.MODEL}",
+    per_device_train_batch_size=10,
+    gradient_accumulation_steps=8,
+    learning_rate=1e-7,
+    warmup_steps=100,
+    max_steps=4000,
     gradient_checkpointing=True,
     # fp16=True,
     evaluation_strategy="steps",
-    per_device_eval_batch_size=14,
+    per_device_eval_batch_size=10,
     predict_with_generate=True,
     generation_max_length=225,
     save_steps=100,
@@ -173,21 +161,19 @@ print("FineTune Phase Started.")
 trainer.train()
 trainer.create_model_card(
     language="fa",
-    tags ="fa-asr",
+    tags="fa-asr",
     model_name="Whisper Small Persian",
-    finetuned_from="makhataei/Whisper-Small-Common-Voice",
+    finetuned_from=f"{settings.MODEL}",
     tasks="transcribe",
-    dataset_tags="mozilla-foundation/common_voice_15_0",
-    dataset="Common Voice 15.0",
+    dataset="Ctejarat",
     dataset_args="config: fa, split: train,test",
 )
 kwargs = {
-    "dataset_tags": "mozilla-foundation/common_voice_15_0",
-    "dataset": "Common Voice 15.0",
+    "dataset": "Ctejarat",
     "dataset_args": "config: fa, split: train,test",
     "language": "fa",
     "model_name": "Whisper Small Persian",
-    "finetuned_from": "makhataei/Whisper-Small-Common-Voice",
+    "finetuned_from": f"{settings.MODEL}",
     "tasks": "transcribe",
     "tags": "fa-asr",
 }

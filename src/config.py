@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     OPENAPI_URL: str = ""
     ORIGINS: str = "*"
     ROOT_PATH: str = ""
-    SWAGGER_TITLE: str = "ChatBotBAK"
-    VERSION: str = "0.0.1"
+    SWAGGER_TITLE: str = "Speech To Text"
+    VERSION: str = "1.1.0"
 
     APPLICATION_ID: str = "d7f48c21-2a19-4bdb-ace8-48928bff0eb5"
     # GRPC_IP: str = "172.24.65.20"
@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     DATE_STRING: str = "%Y-%m-%d"
     FASTAPI_DOCS: str = "/docs"
     FASTAPI_REDOC: str = "/redoc"
-    MODEL: str = "makhataei/Whisper-Small-Common-Voice"
+    MODEL: str = "makhataei/Whisper-Small-Ctejarat"
 
 
 settings = Settings()
