@@ -1,31 +1,23 @@
 """_summary_
 """
-import datetime
-import uvicorn
-from fastapi import FastAPI, Request, Depends,File, UploadFile
+import time
+from dataclasses import dataclass
 from typing import Annotated
-from fastapi.exceptions import RequestValidationError
+
+import uvicorn
+import whisper
+from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from khayyam import JalaliDatetime as jd
-import asyncio
-from src.config import settings
-from dataclasses import dataclass
-import time
-import whisper
+from transformers import (
+    WhisperPreTrainedModel,
+    WhisperForConditionalGeneration,
+)
 
+from src.config import settings
 # from routers.subuser import subuser
 from src.logger import logger
-import time
-from transformers import (
-    AutoModelForQuestionAnswering,
-    AutoTokenizer,
-    pipeline,
-    AutoModel,
-    WhisperPreTrainedModel,WhisperForConditionalGeneration
-)
-import torch
-
 
 app = FastAPI(
     version=settings.VERSION,
@@ -55,8 +47,6 @@ async def startup_events():
     logger.info(f"Ready for Your Questions:{jd.now().isoformat()}")
 
 
-
-
 @dataclass
 class Question:
     question: str
@@ -70,7 +60,7 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
     else:
         AUDIO = file
         for typo in ["cuda", "cpu"]:
-            for size in ["base", "small", "medium", "large-v1", "large-v2","large-v3"]:
+            for size in ["base", "small", "medium", "large-v1", "large-v2", "large-v3"]:
                 start = int(1000 * time.time())
                 try:
                     model = whisper.load_model(name=size, device=typo)
@@ -83,17 +73,17 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
                 response = f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
                 # my_file.writelines(result["text"])
                 # my_file.writelines("\n\n ---------------------")
-                logger.info(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}")
+                logger.info(
+                    f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
+                )
                 # print(result["text"])
-    # my_file.close()
+        # my_file.close()
         result = {
             "Transcript": response,
             "File Size": len(file),
             "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
         }
         return JSONResponse(status_code=200, content=result)
-
-
 
 
 @app.post("/wresponse2", tags=["Whisper"])
@@ -104,7 +94,7 @@ async def create_upload_file(file: UploadFile | None = None):
     else:
         AUDIO = file
         for typo in ["cuda", "cpu"]:
-            for size in ["base", "small", "medium", "large-v1", "large-v2","large-v3"]:
+            for size in ["base", "small", "medium", "large-v1", "large-v2", "large-v3"]:
                 start = int(1000 * time.time())
                 try:
                     model = whisper.load_model(name=size, device=typo)
@@ -117,9 +107,11 @@ async def create_upload_file(file: UploadFile | None = None):
                 response = f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
                 # my_file.writelines(result["text"])
                 # my_file.writelines("\n\n ---------------------")
-                logger.info(f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}")
+                logger.info(
+                    f"inference time for {typo} in {size}-Model is {end - start} milliseconds: \n {transcript['text']}"
+                )
                 # print(result["text"])
-    # my_file.close()
+        # my_file.close()
         result = {
             "Transcript": response,
             "File Name": file.filename,
@@ -138,7 +130,9 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
         for typo in ["cuda", "cpu"]:
             start = int(1000 * time.time())
             try:
-                model = WhisperPreTrainedModel.from_pretrained(settings.MODEL,device_map=typo)
+                model = WhisperPreTrainedModel.from_pretrained(
+                    settings.MODEL, device_map=typo
+                )
             except:
                 break
             transcript = model.transcribe(AUDIO)
@@ -148,17 +142,17 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             # my_file.writelines(result["text"])
             # my_file.writelines("\n\n ---------------------")
-            logger.info(f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}")
+            logger.info(
+                f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
+            )
             # print(result["text"])
-    # my_file.close()
+        # my_file.close()
         result = {
             "Transcript": response,
             "File Size": len(file),
             "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
         }
         return JSONResponse(status_code=200, content=result)
-
-
 
 
 @app.post("/mresponse2", tags=["Man"])
@@ -171,7 +165,9 @@ async def create_upload_file(file: UploadFile | None = None):
         for typo in ["cuda", "cpu"]:
             start = int(1000 * time.time())
             try:
-                model = WhisperPreTrainedModel.from_pretrained(settings.MODEL,device_map=typo)
+                model = WhisperPreTrainedModel.from_pretrained(
+                    settings.MODEL, device_map=typo
+                )
             except:
                 break
             transcript = model.transcribe(AUDIO)
@@ -181,9 +177,11 @@ async def create_upload_file(file: UploadFile | None = None):
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             # my_file.writelines(result["text"])
             # my_file.writelines("\n\n ---------------------")
-            logger.info(f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}")
+            logger.info(
+                f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
+            )
             # print(result["text"])
-    # my_file.close()
+        # my_file.close()
         result = {
             "Transcript": response,
             "File Name": file.filename,
@@ -202,7 +200,9 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
         for typo in ["cuda", "cpu"]:
             start = int(1000 * time.time())
             try:
-                model = WhisperForConditionalGeneration.from_pretrained(settings.MODEL,device_map=typo)
+                model = WhisperForConditionalGeneration.from_pretrained(
+                    settings.MODEL, device_map=typo
+                )
             except:
                 break
             transcript = model.transcribe(AUDIO)
@@ -212,17 +212,17 @@ async def create_file(file: Annotated[bytes | None, File()] = None):
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             # my_file.writelines(result["text"])
             # my_file.writelines("\n\n ---------------------")
-            logger.info(f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}")
+            logger.info(
+                f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
+            )
             # print(result["text"])
-    # my_file.close()
+        # my_file.close()
         result = {
             "Transcript": response,
             "File Size": len(file),
             "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
         }
         return JSONResponse(status_code=200, content=result)
-
-
 
 
 @app.post("/mmresponse2", tags=["Maan"])
@@ -235,7 +235,9 @@ async def create_upload_file(file: UploadFile | None = None):
         for typo in ["cuda", "cpu"]:
             start = int(1000 * time.time())
             try:
-                model = WhisperForConditionalGeneration.from_pretrained(settings.MODEL,device_map=typo)
+                model = WhisperForConditionalGeneration.from_pretrained(
+                    settings.MODEL, device_map=typo
+                )
             except:
                 break
             transcript = model.transcribe(AUDIO)
@@ -245,9 +247,11 @@ async def create_upload_file(file: UploadFile | None = None):
             response = f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
             # my_file.writelines(result["text"])
             # my_file.writelines("\n\n ---------------------")
-            logger.info(f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}")
+            logger.info(
+                f"inference time for {typo} in {settings.MODEL}-Model is {end - start} milliseconds: \n {transcript['text']}"
+            )
             # print(result["text"])
-    # my_file.close()
+        # my_file.close()
         result = {
             "Transcript": response,
             "File Name": file.filename,
@@ -277,6 +281,7 @@ def background_loader():
     model = WhisperForConditionalGeneration.from_pretrained(settings.MODEL)
     logger.info("Models are loaded in Background.")
 
+
 def loaders():
     for size in ["base", "small", "medium", "large-v1", "large-v2", "large-v3"]:
         try:
@@ -290,8 +295,6 @@ def loaders():
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="0.0.0.0", port=80)
-
-
 
 """
 

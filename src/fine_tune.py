@@ -21,13 +21,17 @@ from huggingface_hub import interpreter_login, login
 # interpreter_login()
 login(
     token="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",
-add_to_git_credential=True,
-new_session=True,
-write_permission=True
+    add_to_git_credential=True,
+    new_session=True,
+    write_permission=True,
 )
 ## we will load the both of the data here.
-train_df = pd.read_csv("../datasets/Common_Voice_Corpus_16/fa/train.csv", on_bad_lines='skip')
-test_df = pd.read_csv("../datasets/Common_Voice_Corpus_16/fa/test.csv", on_bad_lines='skip')
+train_df = pd.read_csv(
+    "../datasets/Common_Voice_Corpus_16/fa/train.csv", on_bad_lines="skip"
+)
+test_df = pd.read_csv(
+    "../datasets/Common_Voice_Corpus_16/fa/test.csv", on_bad_lines="skip"
+)
 PATH = "/home/makhataei/Projects/STT/datasets/Common_Voice_Corpus_16/fa/clips/"
 
 audio1 = []
@@ -42,7 +46,9 @@ test_df["audio"] = audio2
 
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
-feature_extractor = WhisperFeatureExtractor.from_pretrained("makhataei/Whisper-Small-Common-Voice")
+feature_extractor = WhisperFeatureExtractor.from_pretrained(
+    "makhataei/Whisper-Small-Common-Voice"
+)
 
 ## Load WhisperTokenizer
 tokenizer = WhisperTokenizer.from_pretrained(
@@ -88,7 +94,7 @@ class DataCollatorSpeechSeq2SeqWithPadding:
     processor: Any
 
     def __call__(
-        self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
+            self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
     ) -> Dict[str, torch.Tensor]:
         # split inputs and labels since they have to be of different lengths and need different padding methods
         # first treat the audio inputs by simply returning torch tensors
@@ -130,7 +136,9 @@ def compute_metrics(pred):
     return {"wer": wer}
 
 
-model = WhisperForConditionalGeneration.from_pretrained("makhataei/Whisper-Small-Common-Voice")
+model = WhisperForConditionalGeneration.from_pretrained(
+    "makhataei/Whisper-Small-Common-Voice"
+)
 model.config.forced_decoder_ids = None
 model.config.suppress_tokens = []
 
@@ -173,7 +181,7 @@ print("FineTune Phase Started.")
 trainer.train()
 trainer.create_model_card(
     language="fa",
-    tags ="fa-asr",
+    tags="fa-asr",
     model_name="Whisper Small Persian",
     finetuned_from="makhataei/Whisper-Small-Common-Voice",
     tasks="transcribe",
