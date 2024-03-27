@@ -3,15 +3,14 @@
 Returns:
     _type_: _description_
 """
-from pydantic_settings import BaseSettings
 import whisper
+from pydantic_settings import BaseSettings
 from transformers import (
     WhisperPreTrainedModel,
     WhisperForConditionalGeneration,
     WhisperTokenizer,
     pipeline
 )
-
 
 
 class Settings(BaseSettings):
@@ -42,6 +41,7 @@ class Settings(BaseSettings):
     FASTAPI_REDOC: str = "/redoc"
     MODEL: str = "makhataei/Whisper-Small-Ctejarat"
 
+
 def loaders():
     for size in ["base", "small", "medium", "large-v1", "large-v2", "large-v3"]:
         try:
@@ -54,12 +54,12 @@ def loaders():
         settings.MODEL, language="Persian", task="transcribe"
     )
     transcriber = pipeline(
-    model=settings.MODEL,
-    tokenizer=tokenizer,
-    device="cpu",
-    use_fast=False,
+        model=settings.MODEL,
+        tokenizer=tokenizer,
+        device="cpu",
+        use_fast=False,
     )
-    #ToDo: Uncomment these on GPU Server
+    # ToDo: Uncomment these on GPU Server
     # try:
     #     transcriber = pipeline(
     #     model=settings.MODEL,
