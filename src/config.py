@@ -3,15 +3,15 @@
 Returns:
     _type_: _description_
 """
+import whisper
 from pydantic_settings import BaseSettings
 import whisper
 from transformers import (
     WhisperPreTrainedModel,
     WhisperForConditionalGeneration,
     WhisperTokenizer,
-    pipeline
+    pipeline,
 )
-
 
 
 class Settings(BaseSettings):
@@ -60,6 +60,41 @@ def loaders():
     use_fast=False,
     )
     #ToDo: Uncomment these on GPU Server
+    # try:
+    #     transcriber = pipeline(
+    #     model=settings.MODEL,
+    #     tokenizer=tokenizer,
+    #     device="cuda",
+    #     use_fast=False,
+    #     )
+    # except:
+    #     transcriber = pipeline(
+    #         model=settings.MODEL,
+    #         tokenizer=tokenizer,
+    #         device="cpu",
+    #         use_fast=False,
+    #     )
+    return transcriber, model_wpt, model_wcg
+
+
+def loaders():
+    for size in ["base", "small", "medium", "large-v1", "large-v2", "large-v3"]:
+        try:
+            model = whisper.load_model(name=size)
+        except:
+            pass
+    model_wpt = WhisperPreTrainedModel.from_pretrained(settings.MODEL)
+    model_wcg = WhisperForConditionalGeneration.from_pretrained(settings.MODEL)
+    tokenizer = WhisperTokenizer.from_pretrained(
+        settings.MODEL, language="Persian", task="transcribe"
+    )
+    transcriber = pipeline(
+        model=settings.MODEL,
+        tokenizer=tokenizer,
+        device="cpu",
+        use_fast=False,
+    )
+    # ToDo: Uncomment these on GPU Server
     # try:
     #     transcriber = pipeline(
     #     model=settings.MODEL,

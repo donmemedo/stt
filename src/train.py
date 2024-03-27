@@ -91,7 +91,7 @@ class DataCollatorSpeechSeq2SeqWithPadding:
     processor: Any
 
     def __call__(
-            self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
+        self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
     ) -> Dict[str, torch.Tensor]:
         # split inputs and labels since they have to be of different lengths and need different padding methods
         # first treat the audio inputs by simply returning torch tensors
