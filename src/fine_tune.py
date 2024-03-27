@@ -28,7 +28,7 @@ login(
 )
 ## we will load the both of the data here.
 PATH = "../datasets/Ctejarat/clips/"
-df = pd.read_csv("../datasets/Ctejarat/STT.csv", on_bad_lines='skip')
+df = pd.read_csv("../datasets/Ctejarat/STT.csv", on_bad_lines="skip")
 msk = np.random.rand(len(df)) < 0.8
 train_df = df[msk]
 test_df = df[~msk]
@@ -48,10 +48,14 @@ test_dataset = Dataset.from_pandas(test_df)
 feature_extractor = WhisperFeatureExtractor.from_pretrained(settings.MODEL)
 
 ## Load WhisperTokenizer
-tokenizer = WhisperTokenizer.from_pretrained(settings.MODEL, language="Persian", task="transcribe")
+tokenizer = WhisperTokenizer.from_pretrained(
+    settings.MODEL, language="Persian", task="transcribe"
+)
 
 ## Combine To Create A WhisperProcessor
-processor = WhisperProcessor.from_pretrained(settings.MODEL, language="Persian", task="transcribe")
+processor = WhisperProcessor.from_pretrained(
+    settings.MODEL, language="Persian", task="transcribe"
+)
 
 
 def prepare_dataset(examples):
@@ -77,7 +81,7 @@ class DataCollatorSpeechSeq2SeqWithPadding:
     processor: Any
 
     def __call__(
-            self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
+        self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
     ) -> Dict[str, torch.Tensor]:
         # split inputs and labels since they have to be of different lengths and need different padding methods
         # first treat the audio inputs by simply returning torch tensors
