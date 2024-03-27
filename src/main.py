@@ -91,6 +91,8 @@ async def speech_to_text(file: UploadFile):
         except Exception as e:
             return JSONResponse(status_code=400, content={"error": str(e)})
 
+            if not os.path.exists(directory):
+                os.makedirs(directory)
 
 @app.post("/ser/response", tags=["SER"])
 async def speech_emotion_recognition(file: UploadFile):
