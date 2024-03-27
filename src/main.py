@@ -1,13 +1,12 @@
 """_summary_
 """
-import time
 import os
-from dataclasses import dataclass
-from typing import Annotated
+import time
+
 import numpy as np
 import uvicorn
 import whisper
-from fastapi import FastAPI, Request, File, UploadFile
+from fastapi import FastAPI, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from khayyam import JalaliDatetime as jd
@@ -17,10 +16,11 @@ from transformers import (
     WhisperTokenizer,
     pipeline
 )
-from src.utils.inference import prediction
+
 from src.config import settings, whispers
-# from routers.subuser import subuser
+
 from src.logger import logger
+from src.utils.inference import prediction
 
 app = FastAPI(
     version=settings.VERSION,
@@ -164,10 +164,10 @@ def loaders():
 
     try:
         transcriber = pipeline(
-        model=settings.MODEL,
-        tokenizer=tokenizer,
-        device="cuda",
-        use_fast=False,
+            model=settings.MODEL,
+            tokenizer=tokenizer,
+            device="cuda",
+            use_fast=False,
         )
     except:
         transcriber = pipeline(
