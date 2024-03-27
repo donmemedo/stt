@@ -9,7 +9,7 @@ from transformers import (
     WhisperPreTrainedModel,
     WhisperForConditionalGeneration,
     WhisperTokenizer,
-    pipeline
+    pipeline,
 )
 
 

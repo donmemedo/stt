@@ -14,7 +14,7 @@ from transformers import (
     WhisperPreTrainedModel,
     WhisperForConditionalGeneration,
     WhisperTokenizer,
-    pipeline
+    pipeline,
 )
 
 from src.config import settings, whispers
@@ -53,14 +53,14 @@ async def speech_to_text(file: UploadFile):
         try:
             input_voice = file.file.read()
             # Create a directory named with today's date
-            date_today = jd.now().strftime('%Y-%m-%d')
-            directory = f'./stt_uploads/{date_today}'
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./stt_uploads/{date_today}"
 
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
             # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime('%H%M%S%f')
+            date_time_now = jd.now().strftime("%H%M%S%f")
             filename = f"{date_time_now}_{file.filename}"
             file_location = f"{directory}/{filename}"
             with open(file_location, "wb+") as file_object:
@@ -68,16 +68,21 @@ async def speech_to_text(file: UploadFile):
             response = {}
             transcriber = whispers[0]
 
-            AUDIO = np.frombuffer(input_voice, np.int8).flatten().astype(np.float32) / 32768.0
+            AUDIO = (
+                np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                / 32768.0
+            )
             start = int(1000 * time.time())
             transcript = transcriber(AUDIO)
             end = int(1000 * time.time())
-            response = f"inference time is {end - start} milliseconds: \n {transcript['text']}"
+            response = (
+                f"inference time is {end - start} milliseconds: \n {transcript['text']}"
+            )
             logger.info(
                 f"inference time is {end - start} milliseconds: \n {transcript['text']}"
             )
             result = {
-                "Transcript": transcript['text'],
+                "Transcript": transcript["text"],
                 "Transcript Log": response,
                 "File Size": len(AUDIO),
                 "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
@@ -95,27 +100,28 @@ async def speech_emotion_recognition(file: UploadFile):
         try:
             input_voice = file.file.read()
             # Create a directory named with today's date
-            date_today = jd.now().strftime('%Y-%m-%d')
-            directory = f'./ser_uploads/{date_today}'
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
 
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
             # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime('%H%M%S%f')
+            date_time_now = jd.now().strftime("%H%M%S%f")
             filename = f"{date_time_now}_{file.filename}"
             file_location = f"{directory}/{filename}"
             with open(file_location, "wb+") as file_object:
                 file_object.write(input_voice)
             response = {}
-            AUDIO = np.frombuffer(input_voice, np.int8).flatten().astype(np.float32) / 32768.0
+            AUDIO = (
+                np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                / 32768.0
+            )
             start = int(1000 * time.time())
             emotion = prediction(image_bytes=input_voice)
             end = int(1000 * time.time())
             response = f"inference time is {end - start} milliseconds: \n {emotion}"
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {emotion}"
-            )
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
             result = {
                 "Transcript": emotion,
                 "Transcript Log": response,

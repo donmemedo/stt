@@ -1,6 +1,15 @@
 from src.utils.commons import get_model, get_tensor
 
-class_names = ['angry', 'calm', 'disgust', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
+class_names = [
+    "angry",
+    "calm",
+    "disgust",
+    "fearful",
+    "happy",
+    "neutral",
+    "sad",
+    "surprised",
+]
 model = get_model()
 
 
