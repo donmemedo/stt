@@ -6,11 +6,11 @@ speech_file = "../test/1/4527484.wav"
 
 # Load the pre-trained DeepSpeaker model
 model = DeepSpeakerModel()
-model.load_state_dict(torch.load('deepspeaker_checkpoint.pth'))
+model.load_state_dict(torch.load("deepspeaker_checkpoint.pth"))
 model.eval()
 
 # Extract features from the input audio
-audio_file_path = speech_file# 'path/to/your/audiofile.wav'
+audio_file_path = speech_file  # 'path/to/your/audiofile.wav'
 features = extract_features(audio_file_path)
 
 # Pass the features through the model to obtain speaker labels

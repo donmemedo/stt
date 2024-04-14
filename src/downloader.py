@@ -1,23 +1,15 @@
 """_summary_
 """
-import datetime
-import uvicorn
-from fastapi import FastAPI, Request
-from fastapi.exceptions import RequestValidationError
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from khayyam import JalaliDatetime as jd
-import asyncio
+import whisper
+from transformers import (
+    WhisperPreTrainedModel,
+    WhisperForConditionalGeneration,
+)
+
 from src.config import settings
-from dataclasses import dataclass
 
 # from routers.subuser import subuser
 from src.logger import logger
-import time
-from transformers import AutoModel, AutoTokenizer, pipeline, WhisperModel,WhisperPreTrainedModel,WhisperForConditionalGeneration
-import torch
-import whisper
-
 
 
 def background_loader():
