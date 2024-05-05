@@ -45,7 +45,7 @@ def get_models(path,typo):
         model.eval()
         return model
     elif typo == 121:
-        model = models.densenet201(pretrained=True)
+        model = models.densenet121(pretrained=True)
         model.classifier = nn.Sequential(
             nn.Linear(1024, 512), nn.LeakyReLU(), nn.Linear(512, 6)
         )
