@@ -20,7 +20,7 @@ from transformers import (
 from src.config import settings, whispers
 
 from src.logger import logger
-from src.utils.inference import prediction
+from src.utils.inference import prediction, prediction121, prediction201
 
 app = FastAPI(
     version=settings.VERSION,
@@ -91,8 +91,9 @@ async def speech_to_text(file: UploadFile):
         except Exception as e:
             return JSONResponse(status_code=400, content={"error": str(e)})
 
-            if not os.path.exists(directory):
-                os.makedirs(directory)
+            # if not os.path.exists(directory):
+            #     os.makedirs(directory)
+
 
 @app.post("/ser/response", tags=["SER"])
 async def speech_emotion_recognition(file: UploadFile):
@@ -121,6 +122,88 @@ async def speech_emotion_recognition(file: UploadFile):
             )
             start = int(1000 * time.time())
             emotion = prediction(image_bytes=input_voice)
+            end = int(1000 * time.time())
+            response = f"inference time is {end - start} milliseconds: \n {emotion}"
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
+            result = {
+                "Transcript": emotion,
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/response121", tags=["SER"])
+async def speech_emotion_recognition121(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            response = {}
+            AUDIO = (
+                np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                / 32768.0
+            )
+            start = int(1000 * time.time())
+            emotion = prediction121(image_bytes=input_voice)
+            end = int(1000 * time.time())
+            response = f"inference time is {end - start} milliseconds: \n {emotion}"
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
+            result = {
+                "Transcript": emotion,
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/response201", tags=["SER"])
+async def speech_emotion_recognition201(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            response = {}
+            AUDIO = (
+                np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                / 32768.0
+            )
+            start = int(1000 * time.time())
+            emotion = prediction201(image_bytes=input_voice)
             end = int(1000 * time.time())
             response = f"inference time is {end - start} milliseconds: \n {emotion}"
             logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
