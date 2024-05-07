@@ -94,6 +94,8 @@ async def speech_to_text(file: UploadFile):
             # if not os.path.exists(directory):
             #     os.makedirs(directory)
 
+            if not os.path.exists(directory):
+                os.makedirs(directory)
 
 @app.post("/ser/response", tags=["SER"])
 async def speech_emotion_recognition(file: UploadFile):
