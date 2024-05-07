@@ -27,6 +27,40 @@ def get_model():
     return model
 
 
+def get_models(path,typo):
+    checkpoint_path = path#"SER_densenet203.pt"
+    if typo == 201:
+        model = models.densenet201(pretrained=True)
+        model.classifier = nn.Sequential(
+            nn.Linear(1920, 512), nn.LeakyReLU(), nn.Linear(512, 6)
+        )
+        try:
+            model.load_state_dict(
+                torch.load(checkpoint_path, map_location="cuda"), strict=False
+            )
+        except:
+            model.load_state_dict(
+                torch.load(checkpoint_path, map_location="cpu"), strict=False
+            )
+        model.eval()
+        return model
+    elif typo == 121:
+        model = models.densenet121(pretrained=True)
+        model.classifier = nn.Sequential(
+            nn.Linear(1024, 512), nn.LeakyReLU(), nn.Linear(512, 6)
+        )
+        try:
+            model.load_state_dict(
+                torch.load(checkpoint_path, map_location="cuda"), strict=False
+            )
+        except:
+            model.load_state_dict(
+                torch.load(checkpoint_path, map_location="cpu"), strict=False
+            )
+        model.eval()
+        return model
+
+
 def get_tensor(image_bytes):
     my_transforms = transforms.Compose(
         [
