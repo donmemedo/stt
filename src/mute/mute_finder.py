@@ -1,8 +1,8 @@
-from model.mossformer2 import Mossformer2Wrapper
+from src.mute.model.mossformer2 import Mossformer2Wrapper
 import librosa
 
 
-def mute_finder(path,decibel_sensitivity=15):
+def percentage_mute_finder(path,decibel_sensitivity=15):
     model = Mossformer2Wrapper.from_pretrained(f'alibabasglab/mossformer2-librimix-2spk')
     try:
         zaza,sample_rate = model.reformer(path)
