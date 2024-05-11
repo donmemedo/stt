@@ -36,12 +36,12 @@ class FFConvM(nn.Module):
         self,
         dim_in,
         dim_out,
-        norm_klass = nn.LayerNorm,
+        norm_class = nn.LayerNorm,
         dropout = 0.1
     ):
         super().__init__()
         self.mdl = nn.Sequential(
-            norm_klass(dim_in),
+            norm_class(dim_in),
             nn.Linear(dim_in, dim_out),
             nn.SiLU(),
             ConvModule(dim_out),
@@ -66,13 +66,13 @@ class Gated_FSMN_dilated(nn.Module):
         self.to_u = FFConvM(
             dim_in = in_channels,
             dim_out = hidden_size,
-            norm_klass = nn.LayerNorm,
+            norm_class = nn.LayerNorm,
             dropout = 0.1,
             )
         self.to_v = FFConvM(
             dim_in = in_channels,
             dim_out = hidden_size,
-            norm_klass = nn.LayerNorm,
+            norm_class = nn.LayerNorm,
             dropout = 0.1,
             )
         self.fsmn = UniDeepFsmn_dilated(in_channels, out_channels, lorder, hidden_size)
@@ -105,9 +105,9 @@ class Gated_FSMN_Block_Dilated(nn.Module):
                  ):
         super(Gated_FSMN_Block_Dilated, self).__init__()
         if norm_type == 'scalenorm':
-            norm_klass = ScaleNorm
+            norm_class = ScaleNorm
         elif norm_type == 'layernorm':
-            norm_klass = nn.LayerNorm
+            norm_class = nn.LayerNorm
 
         self.group_size = group_size
 
@@ -154,7 +154,7 @@ class FLASH_ShareA_FFConvM(nn.Module):
         causal = False,
         dropout = 0.1,
         rotary_pos_emb = None,
-        norm_klass = nn.LayerNorm,
+        norm_class = nn.LayerNorm,
         shift_tokens = True
     ):
         super().__init__()
@@ -173,13 +173,13 @@ class FLASH_ShareA_FFConvM(nn.Module):
         self.to_hidden = FFConvM(
             dim_in = dim,
             dim_out = hidden_dim,
-            norm_klass = norm_klass,
+            norm_class = norm_class,
             dropout = dropout,
             )
         self.to_qk = FFConvM(
             dim_in = dim,
             dim_out = query_key_dim,
-            norm_klass = norm_klass,
+            norm_class = norm_class,
             dropout = dropout,
             )
 
@@ -188,7 +188,7 @@ class FLASH_ShareA_FFConvM(nn.Module):
         self.to_out = FFConvM(
             dim_in = dim*2,
             dim_out = dim,
-            norm_klass = norm_klass,
+            norm_class = norm_class,
             dropout = dropout,
             )
         
@@ -339,9 +339,9 @@ class FLASHTransformer_DualA_FSMN(nn.Module):
         assert norm_type in ('scalenorm', 'layernorm'), 'norm_type must be one of scalenorm or layernorm'
 
         if norm_type == 'scalenorm':
-            norm_klass = ScaleNorm
+            norm_class = ScaleNorm
         elif norm_type == 'layernorm':
-            norm_klass = nn.LayerNorm
+            norm_class = nn.LayerNorm
 
         self.group_size = group_size
 
@@ -350,7 +350,7 @@ class FLASHTransformer_DualA_FSMN(nn.Module):
         #self.fsmn = nn.ModuleList([Gated_FSMN(dim, dim, lorder=20, hidden_size=dim) for _ in range(depth)])
         #self.fsmn = nn.ModuleList([Gated_FSMN_Block(dim) for _ in range(depth)])
         self.fsmn = nn.ModuleList([Gated_FSMN_Block_Dilated(dim) for _ in range(depth)])
-        self.layers = nn.ModuleList([FLASH_ShareA_FFConvM(dim = dim, group_size = group_size, query_key_dim = query_key_dim, expansion_factor = expansion_factor, causal = causal, dropout = attn_dropout, rotary_pos_emb = rotary_pos_emb, norm_klass = norm_klass, shift_tokens = shift_tokens) for _ in range(depth)])
+        self.layers = nn.ModuleList([FLASH_ShareA_FFConvM(dim = dim, group_size = group_size, query_key_dim = query_key_dim, expansion_factor = expansion_factor, causal = causal, dropout = attn_dropout, rotary_pos_emb = rotary_pos_emb, norm_class = norm_class, shift_tokens = shift_tokens) for _ in range(depth)])
 
     def _build_repeats(self, in_channels, out_channels, lorder, hidden_size, repeats=1):
         repeats = [
