@@ -11,8 +11,8 @@ class_names = [
     "surprised",
 ]
 model = get_model()
-model121 = get_models('/home/makhataei/Projects/CallCanterQC/models/SER_densenet123.pt',121)
-model201 = get_models('/home/makhataei/Projects/CallCanterQC/models/SER_densenet203.pt',201)
+model121 = get_models('models/SER_densenet121.pt',121)
+model201 = get_models('models/SER_densenet201.pt',201)
 
 
 def prediction(image_bytes):
