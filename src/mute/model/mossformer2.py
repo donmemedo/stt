@@ -126,7 +126,7 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
         This is a helper function for inference on a single mixture file
         '''
 
-        test_mix, sample_rate = torchaudio.load(mix_file)
+        test_mix, sample_rate = torchaudio.load(mix_file,format=mix_file.split('.')[-1])
 
         if sample_rate != self.sample_rate:
             raise Exception(f'Sampling rate must be {self.sample_rate}')

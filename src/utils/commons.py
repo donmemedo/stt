@@ -13,7 +13,7 @@ def get_model():
     model = models.densenet121(pretrained=True)
     torch.save(model.state_dict(), "ser_model.pt")
     model.classifier = nn.Sequential(
-        nn.Linear(1024, 512), nn.LeakyReLU(), nn.Linear(512, 8)
+        nn.Linear(1024, 512), nn.LeakyReLU(), nn.Linear(512, 4)
     )
     try:
         model.load_state_dict(
