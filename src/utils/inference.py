@@ -2,13 +2,13 @@ from src.utils.commons import get_model, get_tensor, get_models
 
 class_names = [
     "angry",
-    # "calm",
-    # "disgust",
-    "fearful",
     "happy",
     "neutral",
     "sad",
     "surprised",
+    "fearful",
+    # "calm",
+    # "disgust",
 ]
 model = get_model()
 model121 = get_models('models/SER_densenet121.pt',121)
