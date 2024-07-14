@@ -1,12 +1,11 @@
-FROM nvidia/cuda:12.2.2-base-ubuntu22.04
+FROM python:3.10
 
 ENV TZ=Asia/Tehran
 
 COPY . /app
 
 WORKDIR /app
-RUN apt-get update && apt full-upgrade -y
-RUN apt-get -y install python3-pip
+
 RUN pip install -U pip
 RUN pip install -r requirements.txt
 
@@ -18,6 +17,6 @@ WORKDIR /app/src
 
 EXPOSE 8000
 
-RUN python3 downloader.py
-CMD python3 main.py
+RUN python downloader.py
+CMD python main.py
 #CMD uvicorn main:app --host 0.0.0.0 --port 8000
