@@ -498,3 +498,4 @@ pyrightconfig.json
 /tmp/
 /src/tmp/
 /src/Whisper-Small-Common-Voice/
+/src/mute/test/

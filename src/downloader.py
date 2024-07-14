@@ -4,6 +4,7 @@ import whisper
 from transformers import (
     WhisperPreTrainedModel,
     WhisperForConditionalGeneration,
+    AutoModelForAudioClassification
 )
 
 from src.config import settings
@@ -20,6 +21,8 @@ def background_loader():
             pass
     model = WhisperPreTrainedModel.from_pretrained(settings.MODEL)
     model = WhisperForConditionalGeneration.from_pretrained(settings.MODEL)
+    AutoModelForAudioClassification.from_pretrained("KELONMYOSA/wav2vec2-xls-r-300m-emotion-ru", trust_remote_code=True)
+    AutoModelForAudioClassification.from_pretrained("ehcalabres/wav2vec2-lg-xlsr-en-speech-emotion-recognition", trust_remote_code=True)
     logger.info("Models are loaded in Background.")
 
 
