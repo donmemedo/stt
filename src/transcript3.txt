@@ -1,0 +1,121 @@
+---------------------
+
+inference time for cuda in large-v3-Model is 1833 milliseconds: 
+ امروز رفتیم و کارتو بانکشو به همون داد تا مشکل منو حل کنیم بدون اینکه هیچ چک یا نوشتهی از همون بگیره
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 567 milliseconds: 
+ از حساب بانکیم کم بشه
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 589 milliseconds: 
+ نزدیک اینجا بانک وجود دارد؟
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 823 milliseconds: 
+ ممکنه را سپنج کوبایی ریز حساب با اینکی بدهید؟
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 652 milliseconds: 
+ این بانک برای همیشه بسته شده است.
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 692 milliseconds: 
+ برای شما همیشه در بانک ما شعور وجود داره
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 793 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانک ها وام گرفت
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 573 milliseconds: 
+ أسبوعاً كبيراً مجرفتان
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 564 milliseconds: 
+ حساب بانکی خود را بستم.
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 891 milliseconds: 
+ چک های بانکی اختصاصی که نام و نشانی شخص روی آن چاب شده است.
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 610 milliseconds: 
+ آیا بانک سپه متعلق به سپاه هست؟
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 538 milliseconds: 
+ چک بانکی با اسم شخص
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 19949 milliseconds: 
+ امروز رفتیم و کارتو بانکشو به همون داد تا مشکل منو حل کنیم بدون اینکه هیچ چک یا نوشتهی از همون بگیره
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12584 milliseconds: 
+ از حساب بانکیم کم بشه
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12661 milliseconds: 
+ نزدیک اینجا بانک وجود دارد؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 14817 milliseconds: 
+ ممکنه را سپنج کوبایی ریز حساب با اینکی بدهید؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 13443 milliseconds: 
+ این بانک برای همیشه بسته شده است.
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 13582 milliseconds: 
+ برای شما همیشه در بانک ما شعور وجود داره
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 14382 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانک ها وام گرفت
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12600 milliseconds: 
+ أسبوعاً كبيراً مجرفتان
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12341 milliseconds: 
+ حساب بانکی خود را بستم.
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 15239 milliseconds: 
+ چک های بانکی اختصاصی که نام و نشانی شخص روی آن چاب شده است.
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12722 milliseconds: 
+ آیا بانک سپه متعلق به سپاه هست؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12308 milliseconds: 
+ چک بانکی با اسم شخص
+
+ ---------------------
