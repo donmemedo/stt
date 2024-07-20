@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     ORIGINS: str = "5.34.200.221,37.114.196.41,37.114.196.42,37.114.196.43,37.114.196.45,37.114.196.46,37.114.196.47,37.114.196.48,46.209.118.50,46.209.118.51,46.209.118.52,46.209.118.53,46.209.118.54,46.209.118.55"#"*"
     ROOT_PATH: str = ""
     SWAGGER_TITLE: str = "Speech To Text"
-    VERSION: str = "2.0.0"
+    VERSION: str = "2.0.1"
 
     APPLICATION_ID: str = "d7f48c21-2a19-4bdb-ace8-48928bff0eb5"
     # GRPC_IP: str = "172.24.65.20"
