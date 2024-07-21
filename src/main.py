@@ -143,7 +143,8 @@ async def speech_emotion_recognition(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/response121", tags=["SER"])
+@app.post("/ser/response121", tags=["TEMP"])
+# @app.post("/ser/response121", tags=["SER"])
 async def speech_emotion_recognition121(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
@@ -184,7 +185,8 @@ async def speech_emotion_recognition121(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/response201", tags=["SER"])
+@app.post("/ser/response201", tags=["TEMP"])
+# @app.post("/ser/response201", tags=["SER"])
 async def speech_emotion_recognition201(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
@@ -225,7 +227,8 @@ async def speech_emotion_recognition201(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/responseAll", tags=["SER"])
+@app.post("/ser/responseAll", tags=["TEMP"])
+# @app.post("/ser/responseAll", tags=["SER"])
 async def speech_emotion_recognitionAll(file: UploadFile, model_type):
     if model_type == '121' or model_type == '201':
         pass
@@ -358,7 +361,8 @@ async def ehcalabres(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/Emotion", tags=["SER"])
+@app.post("/ser/Emotion", tags=["TEMP"])
+# @app.post("/ser/Emotion", tags=["SER"])
 async def adultchild(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
