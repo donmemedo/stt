@@ -398,19 +398,29 @@ async def adultchild(file: UploadFile):
 
 
 @app.post("/mute/finder", tags=["MUTE"])
-async def mute_finder(file: UploadFile, db_sensitivity: float, mute_time_sensitivity: float,
+async def mute_finder(file: UploadFile, mo_db_sensitivity: float, mute_time_sensitivity: float,tone_db_sensitivity: float, tone_time_sensitivity: float,
                       overlap_time_sensitivity: float):
     try:
-        float(db_sensitivity)
+        float(mo_db_sensitivity)
         float(mute_time_sensitivity)
+        float(tone_db_sensitivity)
+        float(tone_time_sensitivity)
         float(overlap_time_sensitivity)
     except:
         return JSONResponse(status_code=400, content={"message": "You MUST choose Number for sensitivity"})
-    if float(db_sensitivity) > 0:
+    if float(mo_db_sensitivity) > 0:
         pass
     else:
         return JSONResponse(status_code=400, content={"message": "You MUST choose correct Decibel sensitivity"})
     if float(mute_time_sensitivity) > 0:
+        pass
+    else:
+        return JSONResponse(status_code=400, content={"message": "You MUST choose correct Mute Time sensitivity"})
+    if float(tone_db_sensitivity) > 0:
+        pass
+    else:
+        return JSONResponse(status_code=400, content={"message": "You MUST choose correct Decibel sensitivity"})
+    if float(tone_time_sensitivity) > 0:
         pass
     else:
         return JSONResponse(status_code=400, content={"message": "You MUST choose correct Mute Time sensitivity"})
@@ -444,18 +454,22 @@ async def mute_finder(file: UploadFile, db_sensitivity: float, mute_time_sensiti
                     / 32768.0
             )
             start = int(1000 * time.time())
-            percentage = percentage_mute_finder(file_location, db_sensitivity, mute_time_sensitivity,
-                                                overlap_time_sensitivity)
+            percentage = percentage_mute_finder(file_location, mo_db_sensitivity, mute_time_sensitivity,
+                                                tone_db_sensitivity, tone_time_sensitivity, overlap_time_sensitivity)
             end = int(1000 * time.time())
-            response = f"inference time is {end - start} milliseconds when Decibel Sensitivity is {db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}"
+            response = f"inference time is {end - start} milliseconds when Mute Decibel Sensitivity is {mo_db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity},Tone Decibel Sensitivity is {tone_db_sensitivity}, Tone Time Sensitivity is {tone_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}"
             logger.info(
-                f"inference time is {end - start} milliseconds when Decibel Sensitivity is {db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}")
+                f"inference time is {end - start} milliseconds when Mute Decibel Sensitivity is {mo_db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity}, Tone Decibel Sensitivity is {tone_db_sensitivity}, Tone Time Sensitivity is {tone_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}")
             result = {
-                "Percentage": percentage[1],
+                "Mute Percentage": percentage[1],
                 "List of Mute times": percentage[2],
                 "Mute times More Than Sensitivity": percentage[3],
                 "List of Mute times More Than Sensitivity": percentage[4],
                 "List of Overlap times More Than Sensitivity": percentage[5],
+                "Tone Percentage": percentage[6],
+                "List of Tone times": percentage[7],
+                "Tone times More Than Sensitivity": percentage[8],
+                "List of Tone times More Than Sensitivity": percentage[9],
                 "Transcript Log": response,
                 "File Size": len(AUDIO),
                 "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),

@@ -6,7 +6,8 @@ from src.mute.model.mossformer2 import Mossformer2Wrapper
 model = Mossformer2Wrapper.from_pretrained(f'alibabasglab/mossformer2-librimix-2spk')
 
 
-def percentage_mute_finder(path, decibel_sensitivity=15, mute_sensitivity=0.5, overlap_sensitivity=0):
+def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_sensitivity=0.5,tone_decibel_sensitivity=15,
+                           tone_sensitivity=0.01, overlap_sensitivity=0):
     try:
         sound_array, sample_rate = model.reformer(path)
         voice = {}
@@ -17,13 +18,60 @@ def percentage_mute_finder(path, decibel_sensitivity=15, mute_sensitivity=0.5, o
         list_of_overlaps_with_sensitivity = []
         for i in range(sound_array.shape[2]):
             index_seconds = []
-            index = librosa.effects.split(sound_array[0][..., i], top_db=decibel_sensitivity)
+            index = librosa.effects.split(sound_array[0][..., i], top_db=tone_decibel_sensitivity)
+            # for tito in index:
+            #     for t in range(tito[0], tito[1]):
+            #         overlap_detector[t] += 1
+            index_seconds = (index / 8000).tolist()
+            voice[i] = index_seconds
+        tone_detector = np.zeros(shape=voice_len, dtype=int)
+        tone_detector_with_sensitivity = np.zeros(shape=voice_len, dtype=int)
+        list_of_tone = []
+        list_of_tone_with_sensitivity = []
+        time_of_tone = 0
+        for keys in voice.keys():
+            for val in voice[keys]:
+                x = int(val[0] * 1000)
+                y = int(val[1] * 1000)
+                if (y - x) / 1000 > tone_sensitivity:
+                    time_of_tone = time_of_tone + y - x
+                for i in range(x, y):
+                    tone_detector[i] = 1
+        m, n, k = 0, 0, 0
+        while k < len(tone_detector):
+            if tone_detector[k] == 0:
+                m = k
+                n = k
+                while tone_detector[n] == 0 and n < len(tone_detector) - 1:
+                    n += 1
+                k = n
+                list_of_tone.append([m / 1000, n / 1000])
+            k += 1
+        for val in list_of_tone:
+            x = int(val[0] * 1000)
+            y = int(val[1] * 1000)
+            if (y - x) / 1000 > tone_sensitivity:
+                list_of_tone_with_sensitivity.append(val)
+                for i in range(x, y):
+                    tone_detector_with_sensitivity[i] = 1
+
+        m, n, k = 0, 0, 0
+        while k < len(tone_detector_with_sensitivity):
+            if tone_detector_with_sensitivity[k] == 0:
+                m = k
+                n = k
+                while tone_detector_with_sensitivity[n] == 0 and n < len(tone_detector_with_sensitivity) - 1:
+                    n += 1
+                k = n
+            k += 1
+        for i in range(sound_array.shape[2]):
+            index_seconds = []
+            index = librosa.effects.split(sound_array[0][..., i], top_db=mo_decibel_sensitivity)
             for tito in index:
                 for t in range(tito[0], tito[1]):
                     overlap_detector[t] += 1
             index_seconds = (index / 8000).tolist()
             voice[i] = index_seconds
-
         m, n, k = 0, 0, 0
         while k < len(overlap_detector):
             if overlap_detector[k] == 2:
@@ -79,7 +127,10 @@ def percentage_mute_finder(path, decibel_sensitivity=15, mute_sensitivity=0.5, o
                     n += 1
                 k = n
             k += 1
-        return 200, f"{np.sum(mute_detector) / voice_len}", list_of_mute, np.sum(
-            mute_detector_with_sensitivity) / voice_len, list_of_mute_with_sensitivity, list_of_overlaps_with_sensitivity
+        return (200, f"{np.sum(mute_detector) / voice_len}", list_of_mute, np.sum(
+            mute_detector_with_sensitivity) / voice_len, list_of_mute_with_sensitivity,
+                list_of_overlaps_with_sensitivity, f"{np.sum(tone_detector) / voice_len}", list_of_tone, np.sum(
+            tone_detector_with_sensitivity) / voice_len, list_of_tone_with_sensitivity)
+
     except:
-        return 400, "Mute Percentage can't be calculated.", 0, 0, 0
+        return 400, "Can't be calculated.", 0, 0, 0, 0, 0, 0, 0, 0
