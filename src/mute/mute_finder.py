@@ -2,11 +2,12 @@ import librosa
 import numpy as np
 
 from src.mute.model.mossformer2 import Mossformer2Wrapper
+from src.config import whispers
 
 model = Mossformer2Wrapper.from_pretrained(f'alibabasglab/mossformer2-librimix-2spk')
 
 
-def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_sensitivity=0.5,tone_decibel_sensitivity=15,
+def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_sensitivity=0.5, tone_decibel_sensitivity=15,
                            tone_sensitivity=0.01, overlap_sensitivity=0):
     try:
         sound_array, sample_rate = model.reformer(path)
@@ -134,3 +135,14 @@ def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_sensitivity=0.5,
 
     except:
         return 400, "Can't be calculated.", 0, 0, 0, 0, 0, 0, 0, 0
+
+
+def trancripter(path, transcriber):
+    try:
+        sound_array, sample_rate = model.reformer(path)
+        speech_texts = {}
+        for i in range(sound_array.shape[2]):
+            speech_texts[i] = transcriber(sound_array[0][..., i])
+        return 200, speech_texts
+    except:
+        return 400, {0: "", 1: ""}
