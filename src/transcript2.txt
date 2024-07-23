@@ -1,0 +1,121 @@
+---------------------
+
+inference time for cuda in large-v3-Model is 1682 milliseconds: 
+ امروز رفتیم و کارتو بانکشو به همون داد تا مشکل منو حل کنیم بدون اینکه هیچ چک یا نوشتهی از همون بگیره
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 19946 milliseconds: 
+ امروز رفتیم و کارتو بانکشو به همون داد تا مشکل منو حل کنیم بدون اینکه هیچ چک یا نوشتهی از همون بگیره
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 570 milliseconds: 
+ از حساب بانکیم کم بشه
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12807 milliseconds: 
+ از حساب بانکیم کم بشه
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 607 milliseconds: 
+ نزدیک اینجا بانک وجود دارد؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12894 milliseconds: 
+ نزدیک اینجا بانک وجود دارد؟
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 828 milliseconds: 
+ ممکنه را سپنج کوبایی ریز حساب با اینکی بدهید؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 15138 milliseconds: 
+ ممکنه را سپنج کوبایی ریز حساب با اینکی بدهید؟
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 649 milliseconds: 
+ این بانک برای همیشه بسته شده است.
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 13427 milliseconds: 
+ این بانک برای همیشه بسته شده است.
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 718 milliseconds: 
+ برای شما همیشه در بانک ما شعور وجود داره
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 13648 milliseconds: 
+ برای شما همیشه در بانک ما شعور وجود داره
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 798 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانک ها وام گرفت
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 14400 milliseconds: 
+ به منظور تقویت اقتصاد کشور دولت از بانک ها وام گرفت
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 607 milliseconds: 
+ أسبوعاً كبيراً مجرفتان
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12616 milliseconds: 
+ أسبوعاً كبيراً مجرفتان
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 565 milliseconds: 
+ حساب بانکی خود را بستم.
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12700 milliseconds: 
+ حساب بانکی خود را بستم.
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 975 milliseconds: 
+ چک های بانکی اختصاصی که نام و نشانی شخص روی آن چاب شده است.
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 15914 milliseconds: 
+ چک های بانکی اختصاصی که نام و نشانی شخص روی آن چاب شده است.
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 649 milliseconds: 
+ آیا بانک سپه متعلق به سپاه هست؟
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12924 milliseconds: 
+ آیا بانک سپه متعلق به سپاه هست؟
+
+ ------------------------------------------
+
+inference time for cuda in large-v3-Model is 554 milliseconds: 
+ چک بانکی با اسم شخص
+
+ ------------------------------------------
+
+inference time for cpu in large-v3-Model is 12342 milliseconds: 
+ چک بانکی با اسم شخص
+
+ ---------------------

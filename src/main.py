@@ -19,8 +19,9 @@ from transformers import (
 )
 
 from src.config import settings, whispers
+from src.gender.gender_classifier import gender_predict
 from src.logger import logger
-from src.mute.mute_finder import percentage_mute_finder
+from src.mute.mute_finder import percentage_mute_finder, trancripter
 from src.utils.inference import prediction, prediction121, prediction201, predicto
 from src.utils.pred import predict_ser, predict2_ser
 
@@ -61,7 +62,7 @@ async def speech_to_text(file: UploadFile):
             input_voice = file.file.read()
             # Create a directory named with today's date
             date_today = jd.now().strftime("%Y-%m-%d")
-            directory = f"./stt_uploads/{date_today}"
+            directory = f"./stt_uploads/common/{date_today}"
 
             if not os.path.exists(directory):
                 os.makedirs(directory)
@@ -98,8 +99,49 @@ async def speech_to_text(file: UploadFile):
         except Exception as e:
             return JSONResponse(status_code=400, content={"error": str(e)})
 
-            # if not os.path.exists(directory):
-            #     os.makedirs(directory)
+
+@app.post("/stt/chat", tags=["STT"])
+async def speech_to_text(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./stt_uploads/chats/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            AUDIO = (
+                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                    / 32768.0
+            )
+            start = int(1000 * time.time())
+            result = trancripter(file_location, whispers[0])
+            end = int(1000 * time.time())
+            response = (
+                f"inference time is {end - start} milliseconds: \n {result[1]}"
+            )
+            logger.info(
+                f"inference time is {end - start} milliseconds: \n {result[1]}"
+            )
+            result = {
+                "Transcript": result[1],
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
 
 
 @app.post("/ser/response", tags=["SER"])
@@ -143,7 +185,8 @@ async def speech_emotion_recognition(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/response121", tags=["SER"])
+@app.post("/ser/response121", tags=["TEMP"])
+# @app.post("/ser/response121", tags=["SER"])
 async def speech_emotion_recognition121(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
@@ -184,7 +227,8 @@ async def speech_emotion_recognition121(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/response201", tags=["SER"])
+@app.post("/ser/response201", tags=["TEMP"])
+# @app.post("/ser/response201", tags=["SER"])
 async def speech_emotion_recognition201(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
@@ -225,7 +269,8 @@ async def speech_emotion_recognition201(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/responseAll", tags=["SER"])
+@app.post("/ser/responseAll", tags=["TEMP"])
+# @app.post("/ser/responseAll", tags=["SER"])
 async def speech_emotion_recognitionAll(file: UploadFile, model_type):
     if model_type == '121' or model_type == '201':
         pass
@@ -314,6 +359,49 @@ async def kelonmyosa(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
+@app.post("/gender/detector", tags=["GENDER"])
+async def gender(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./gender_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            start = int(1000 * time.time())
+            response = gender_predict(file_location)
+            pred = {"label": None, "score": 0}
+            for zico in response:
+                if zico["score"] > pred["score"]:
+                    pred["label"] = zico["label"]
+                    pred["score"] = zico["score"]
+
+            logger.info(response)
+            end = int(1000 * time.time())
+            logger.info(f"inference time is {end - start} milliseconds: \n {pred['label']}")
+            result = {
+                "Label": pred['label'],
+                "Score": pred['score'],
+                "Transcript Log": response,
+                "Inference Log": f"{end - start} milliseconds",
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
 @app.post("/ser/ehcalabres", tags=["SER"])
 async def ehcalabres(file: UploadFile):
     if not file:
@@ -358,7 +446,8 @@ async def ehcalabres(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/ser/Emotion", tags=["SER"])
+@app.post("/ser/Emotion", tags=["TEMP"])
+# @app.post("/ser/Emotion", tags=["SER"])
 async def adultchild(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
@@ -394,19 +483,30 @@ async def adultchild(file: UploadFile):
 
 
 @app.post("/mute/finder", tags=["MUTE"])
-async def mute_finder(file: UploadFile, db_sensitivity: float, mute_time_sensitivity: float,
+async def mute_finder(file: UploadFile, mo_db_sensitivity: float, mute_time_sensitivity: float,
+                      tone_db_sensitivity: float, tone_time_sensitivity: float,
                       overlap_time_sensitivity: float):
     try:
-        float(db_sensitivity)
+        float(mo_db_sensitivity)
         float(mute_time_sensitivity)
+        float(tone_db_sensitivity)
+        float(tone_time_sensitivity)
         float(overlap_time_sensitivity)
     except:
         return JSONResponse(status_code=400, content={"message": "You MUST choose Number for sensitivity"})
-    if float(db_sensitivity) > 0:
+    if float(mo_db_sensitivity) > 0:
         pass
     else:
         return JSONResponse(status_code=400, content={"message": "You MUST choose correct Decibel sensitivity"})
     if float(mute_time_sensitivity) > 0:
+        pass
+    else:
+        return JSONResponse(status_code=400, content={"message": "You MUST choose correct Mute Time sensitivity"})
+    if float(tone_db_sensitivity) > 0:
+        pass
+    else:
+        return JSONResponse(status_code=400, content={"message": "You MUST choose correct Decibel sensitivity"})
+    if float(tone_time_sensitivity) > 0:
         pass
     else:
         return JSONResponse(status_code=400, content={"message": "You MUST choose correct Mute Time sensitivity"})
@@ -440,18 +540,22 @@ async def mute_finder(file: UploadFile, db_sensitivity: float, mute_time_sensiti
                     / 32768.0
             )
             start = int(1000 * time.time())
-            percentage = percentage_mute_finder(file_location, db_sensitivity, mute_time_sensitivity,
-                                                overlap_time_sensitivity)
+            percentage = percentage_mute_finder(file_location, mo_db_sensitivity, mute_time_sensitivity,
+                                                tone_db_sensitivity, tone_time_sensitivity, overlap_time_sensitivity)
             end = int(1000 * time.time())
-            response = f"inference time is {end - start} milliseconds when Decibel Sensitivity is {db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}"
+            response = f"inference time is {end - start} milliseconds when Mute Decibel Sensitivity is {mo_db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity},Tone Decibel Sensitivity is {tone_db_sensitivity}, Tone Time Sensitivity is {tone_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}"
             logger.info(
-                f"inference time is {end - start} milliseconds when Decibel Sensitivity is {db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}")
+                f"inference time is {end - start} milliseconds when Mute Decibel Sensitivity is {mo_db_sensitivity}, Mute Time Sensitivity is {mute_time_sensitivity}, Tone Decibel Sensitivity is {tone_db_sensitivity}, Tone Time Sensitivity is {tone_time_sensitivity}, and Overlap Time Sensitivity is {overlap_time_sensitivity}: \n {percentage}")
             result = {
-                "Percentage": percentage[1],
+                "Mute Percentage": percentage[1],
                 "List of Mute times": percentage[2],
                 "Mute times More Than Sensitivity": percentage[3],
                 "List of Mute times More Than Sensitivity": percentage[4],
                 "List of Overlap times More Than Sensitivity": percentage[5],
+                "Tone Percentage": percentage[6],
+                "List of Tone times": percentage[7],
+                "Tone times More Than Sensitivity": percentage[8],
+                "List of Tone times More Than Sensitivity": percentage[9],
                 "Transcript Log": response,
                 "File Size": len(AUDIO),
                 "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
