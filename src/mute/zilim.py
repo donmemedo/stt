@@ -1,20 +1,43 @@
 import gc
-import os
 import librosa
 import numpy as np
+import os
 import torch
-from src.mute.model.mossformer2 import Mossformer2Wrapper
-from src.gender.gender_classifier import gender_predict
-from src.utils.swallow import detect_swallow
-from src.utils.pred import predict_ser
+
 from src.config import whispers
-import requests
+from src.mute.model.mossformer2 import Mossformer2Wrapper
 
 model = Mossformer2Wrapper.from_pretrained(f'alibabasglab/mossformer2-librimix-2spk')
 
+from src.gender.gender_classifier import gender_predict
 
-def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_time_sensitivity=0.5, tone_decibel_sensitivity=15,
-                           tone_time_sensitivity=0.01, overlap_sensitivity=0):
+
+def dupi(path):
+    try:
+        # sound_array, sample_rate = model.reformer(path)
+        new_path = path.split('.')[0]
+        if not os.path.exists(f'{new_path}'):
+            os.makedirs(f'{new_path}')
+
+        model.inference(path, f'{new_path}')
+        gc.collect()
+        torch.cuda.empty_cache()
+        return os.listdir(f'{new_path}')
+    except:
+        return 0
+
+
+path = "/media/makhataei/Backups/Projects/STT/test/100 Calls/4527627.wav"
+bebe = dupi(path)
+patho = path.split('.')[0]
+for path in bebe:
+    print(gender_predict(f"{patho}/{path}"))
+
+print("yay")
+
+
+def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_sensitivity=0.5, tone_decibel_sensitivity=15,
+                           tone_sensitivity=0.01, overlap_sensitivity=0):
     try:
         sound_array, sample_rate = model.reformer(path)
         voice = {}
@@ -40,7 +63,7 @@ def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_time_sensitivity
             for val in voice[keys]:
                 x = int(val[0] * 1000)
                 y = int(val[1] * 1000)
-                if (y - x) / 1000 > tone_time_sensitivity:
+                if (y - x) / 1000 > tone_sensitivity:
                     time_of_tone = time_of_tone + y - x
                 for i in range(x, y):
                     tone_detector[i] = 1
@@ -57,7 +80,7 @@ def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_time_sensitivity
         for val in list_of_tone:
             x = int(val[0] * 1000)
             y = int(val[1] * 1000)
-            if (y - x) / 1000 > tone_time_sensitivity:
+            if (y - x) / 1000 > tone_sensitivity:
                 list_of_tone_with_sensitivity.append(val)
                 for i in range(x, y):
                     tone_detector_with_sensitivity[i] = 1
@@ -103,7 +126,7 @@ def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_time_sensitivity
             for val in voice[keys]:
                 x = int(val[0] * 1000)
                 y = int(val[1] * 1000)
-                if (y - x) / 1000 > mute_time_sensitivity:
+                if (y - x) / 1000 > mute_sensitivity:
                     time_of_mute = time_of_mute + y - x
                 for i in range(x, y):
                     mute_detector[i] = 1
@@ -120,7 +143,7 @@ def percentage_mute_finder(path, mo_decibel_sensitivity=1, mute_time_sensitivity
         for val in list_of_mute:
             x = int(val[0] * 1000)
             y = int(val[1] * 1000)
-            if (y - x) / 1000 > mute_time_sensitivity:
+            if (y - x) / 1000 > mute_sensitivity:
                 list_of_mute_with_sensitivity.append(val)
                 for i in range(x, y):
                     mute_detector_with_sensitivity[i] = 1
@@ -148,102 +171,7 @@ def trancripter(path, transcriber):
         sound_array, sample_rate = model.reformer(path)
         speech_texts = {}
         for i in range(sound_array.shape[2]):
-            data=librosa.resample(sound_array[0][..., i], orig_sr=sample_rate, target_sr=16000)
-            speech_texts[i] = transcriber(data)
-            # speech_texts[i] = transcriber(sound_array[0][..., i])
+            speech_texts[i] = transcriber(sound_array[0][..., i])
         return 200, speech_texts
     except:
         return 400, {0: "", 1: ""}
-
-def whisper_large_v3_trancripter(path):
-    API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
-    headers = {"Authorization": "Bearer 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"}
-    try:
-        speech_texts = {}
-        new_path=path.split('.')[0]
-        if not new_path:
-            new_path=f".{path.split('.')[1]}"
-        if not os.path.exists(f'{new_path}'):
-            os.makedirs(f'{new_path}')
-        model.inference(path, f'{new_path}')
-        gc.collect()
-        torch.cuda.empty_cache()
-        indexer =os.listdir(f'{new_path}')
-        for i in range(len(indexer)):
-            with open(f"{new_path}/{indexer[i]}", "rb") as f:
-                data = f.read()
-            response = requests.post(API_URL, headers=headers, data=data)
-            if response.status_code != 200:
-                response = requests.post(API_URL, headers=headers, data=data)
-            speech_texts[i] = response.json()['text']
-
-        return 200, speech_texts
-    except:
-        return 400, {0: "", 1: ""}
-
-
-def gender_classification(path):
-    try:
-        new_path=path.split('.')[0]
-        if not new_path:
-            new_path=f".{path.split('.')[1]}"
-        if not os.path.exists(f'{new_path}'):
-            os.makedirs(f'{new_path}')
-        genders={}
-        model.inference(path, f'{new_path}')
-        gc.collect()
-        torch.cuda.empty_cache()
-        indexer =os.listdir(f'{new_path}')
-        for i in range(len(indexer)):
-            genders[i]=gender_predict(f"{new_path}/{indexer[i]}")
-
-        return 200,genders
-    except:
-        return 400, {0: "", 1: ""}
-
-
-def swallow_detection(path):
-    try:
-        new_path=path.split('.')[0]
-        if not new_path:
-            new_path=f".{path.split('.')[1]}"
-        if not os.path.exists(f'{new_path}'):
-            os.makedirs(f'{new_path}')
-        swallows={}
-        model.inference(path, f'{new_path}')
-        gc.collect()
-        torch.cuda.empty_cache()
-        indexer =os.listdir(f'{new_path}')
-        for i in range(len(indexer)):
-            swallows[i]=detect_swallow(f"{new_path}/{indexer[i]}")
-
-        return 200,swallows
-    except:
-        return 400, {0: "", 1: ""}
-
-
-def emotion_detection(path):
-    try:
-        new_path=path.split('.')[0]
-        if not new_path:
-            new_path=f".{path.split('.')[1]}"
-        if not os.path.exists(f'{new_path}'):
-            os.makedirs(f'{new_path}')
-        emotions={}
-        model.inference(path, f'{new_path}')
-        gc.collect()
-        torch.cuda.empty_cache()
-        indexer =os.listdir(f'{new_path}')
-        for i in range(len(indexer)):
-            emotions[i]=predict_ser(f"{new_path}/{indexer[i]}")
-
-        return 200,emotions
-    except:
-        return 400, {0: "", 1: ""}
-
-
-
-# whisper_large_v3_trancripter('/media/makhataei/Backups/Projects/STT/test/100 Calls/4556868.wav')
-
-# bb=trancripter('/media/makhataei/Backups/Projects/STT/test/100 Calls/4539186.wav', whispers[1])
-# print("rr")

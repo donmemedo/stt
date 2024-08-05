@@ -26,10 +26,10 @@ class Settings(BaseSettings):
     DOCS_URL: str = ""
 
     OPENAPI_URL: str = ""
-    ORIGINS: str = "5.34.200.221,37.114.196.41,37.114.196.42,37.114.196.43,37.114.196.45,37.114.196.46,37.114.196.47,37.114.196.48,46.209.118.50,46.209.118.51,46.209.118.52,46.209.118.53,46.209.118.54,46.209.118.55"#"*"
+    ORIGINS: str = "5.34.200.221,37.114.196.41,37.114.196.42,37.114.196.43,37.114.196.45,37.114.196.46,37.114.196.47,37.114.196.48,46.209.118.50,46.209.118.51,46.209.118.52,46.209.118.53,46.209.118.54,46.209.118.55"  # "*"
     ROOT_PATH: str = ""
     SWAGGER_TITLE: str = "Speech To Text"
-    VERSION: str = "2.5.0"
+    VERSION: str = "2.6.0"
 
     APPLICATION_ID: str = "d7f48c21-2a19-4bdb-ace8-48928bff0eb5"
     # GRPC_IP: str = "172.24.65.20"
@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     FASTAPI_DOCS: str = "/docs"
     FASTAPI_REDOC: str = "/redoc"
     MODEL: str = "makhataei/Whisper-Small-Ctejarat"
+
 
 def loaders():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -59,12 +60,19 @@ def loaders():
         settings.MODEL, sampling_rate=8000
     )
     transcriber = pipeline(
-    model=settings.MODEL,
-    tokenizer=tokenizer,
-    device="cpu",#device,
-    use_fast=False, feature_extractor=features
+        model=settings.MODEL,
+        tokenizer=tokenizer,
+        device=device,  # "cpu",device,
+        use_fast=False, feature_extractor=features
     )
-    return transcriber, model_wpt, model_wcg
+    wlv3_transcriber = pipeline(
+        model="openai/whisper-large-v3",
+        tokenizer=WhisperTokenizer.from_pretrained("openai/whisper-large-v3", language="Persian", task="transcribe"),
+        device=device,  # "cpu",device,
+        use_fast=False, feature_extractor=WhisperFeatureExtractor.from_pretrained("openai/whisper-large-v3")
+        # , sampling_rate=8000,padding='max_length')
+    )
+    return transcriber, wlv3_transcriber, model_wpt, model_wcg
 
 
 settings = Settings()

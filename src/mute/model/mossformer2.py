@@ -7,17 +7,19 @@ from huggingface_hub import PyTorchModelHubMixin
 
 from src.mute.model.utils.one_path_flash_fsmn import Encoder, Decoder, Dual_Path_Model, SBFLASHBlock_DualA
 
+
 def getCheckpoints(config_name):
-    
     from huggingface_hub import hf_hub_download
 
-    for file in ['encoder','decoder','masknet']:
+    for file in ['encoder', 'decoder', 'masknet']:
         if not os.path.exists(f'./model_weights/{config_name}/{file}.ckpt'):
             print(f'downloading {file}.cpkt')
-            hf_hub_download(repo_id=f'alibabasglab/{config_name}', filename=f'{file}.ckpt', local_dir=f'./model_weights/{config_name}')
+            hf_hub_download(repo_id=f'alibabasglab/{config_name}', filename=f'{file}.ckpt',
+                            local_dir=f'./model_weights/{config_name}')
             print(f'{file}.cpkt downloaded')
         else:
             print(f'{file}.cpkt already downloaded')
+
 
 class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
     """The wrapper for the Mossformer2 model which combines the Encoder, Masknet and the Encoder
@@ -25,12 +27,12 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
     """
 
     def __init__(
-        self,
-        config: dict
+            self,
+            config: dict
     ):
 
         super(Mossformer2Wrapper, self).__init__()
-        
+
         self.config_name = config["config_name"]
         print(f'{self.config_name} config loaded')
 
@@ -76,7 +78,7 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
         # device = 'cpu'
         self.to(device)
         print(f'model initialised on {self.device}')
-    
+
     @property
     def device(self):
         return next(self.parameters()).device
@@ -86,10 +88,13 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
             print("no checkpoints have been cached, getting them now...")
             getCheckpoints(self.config_name)
 
-        #load the model checkpoints
-        self.encoder.load_state_dict(torch.load(f'model_weights/{self.config_name}/encoder.ckpt', map_location=torch.device(self.device)))
-        self.decoder.load_state_dict(torch.load(f'model_weights/{self.config_name}/decoder.ckpt', map_location=torch.device(self.device)))
-        self.masknet.load_state_dict(torch.load(f'model_weights/{self.config_name}/masknet.ckpt', map_location=torch.device(self.device)))
+        # load the model checkpoints
+        self.encoder.load_state_dict(
+            torch.load(f'model_weights/{self.config_name}/encoder.ckpt', map_location=torch.device(self.device)))
+        self.decoder.load_state_dict(
+            torch.load(f'model_weights/{self.config_name}/decoder.ckpt', map_location=torch.device(self.device)))
+        self.masknet.load_state_dict(
+            torch.load(f'model_weights/{self.config_name}/masknet.ckpt', map_location=torch.device(self.device)))
 
     def inference(self, mix_file, output_dir):
         '''
@@ -126,7 +131,7 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
         This is a helper function for inference on a single mixture file
         '''
 
-        test_mix, sample_rate = torchaudio.load(mix_file,format=mix_file.split('.')[-1])
+        test_mix, sample_rate = torchaudio.load(mix_file, format=mix_file.split('.')[-1])
 
         if sample_rate != self.sample_rate:
             raise Exception(f'Sampling rate must be {self.sample_rate}')
@@ -141,7 +146,7 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
             signal = signal / signal.abs().max()
             est_source_norm.append(signal.unsqueeze(1).unsqueeze(0))
         est_source = torch.cat(est_source_norm, 2)
-        return est_source.detach().cpu().numpy(),sample_rate
+        return est_source.detach().cpu().numpy(), sample_rate
 
     def forward(self, mix):
         """ Processes the input tensor x and returns an output tensor."""
@@ -172,8 +177,3 @@ class Mossformer2Wrapper(nn.Module, PyTorchModelHubMixin):
             est_source = est_source[:, :T_origin, :]
 
         return est_source
-
-
-
-
-    

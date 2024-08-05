@@ -1,8 +1,12 @@
 # import cudf.pandas
 # cudf.pandas.install()
-from datasets import Dataset
-import pandas as pd
+import evaluate
 import librosa
+import pandas as pd
+import torch
+from dataclasses import dataclass
+from datasets import Dataset
+from huggingface_hub import interpreter_login, login
 from transformers import (
     WhisperFeatureExtractor,
     WhisperTokenizer,
@@ -11,12 +15,7 @@ from transformers import (
     Seq2SeqTrainer,
     WhisperForConditionalGeneration,
 )
-import torch
-from dataclasses import dataclass
 from typing import Any, Dict, List, Union
-import evaluate
-
-from huggingface_hub import interpreter_login, login
 
 # interpreter_login()
 login(
@@ -94,7 +93,7 @@ class DataCollatorSpeechSeq2SeqWithPadding:
     processor: Any
 
     def __call__(
-        self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
+            self, features: List[Dict[str, Union[List[int], torch.Tensor]]]
     ) -> Dict[str, torch.Tensor]:
         # split inputs and labels since they have to be of different lengths and need different padding methods
         # first treat the audio inputs by simply returning torch tensors

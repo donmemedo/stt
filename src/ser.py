@@ -1,4 +1,5 @@
 from huggingface_hub import login
+
 login(
     token="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",
     add_to_git_credential=True,
@@ -6,10 +7,9 @@ login(
     write_permission=True,
 )
 
-
 from datasets import load_dataset
 
-minds_14 = load_dataset("KELONMYOSA/dusha_emotion_audio") # for French
+minds_14 = load_dataset("KELONMYOSA/dusha_emotion_audio")  # for French
 # to download all data for multi-lingual fine-tuning uncomment following line
 # minds_14 = load_dataset("PolyAI/all", "all")
 
@@ -17,7 +17,7 @@ minds_14 = load_dataset("KELONMYOSA/dusha_emotion_audio") # for French
 print(minds_14)
 
 # minds_14 = minds_14.train_test_split(test_size=0.2)
-minds_14 = minds_14.remove_columns(["file"])#, "transcription", "english_transcription", "lang_id"])
+minds_14 = minds_14.remove_columns(["file"])  # , "transcription", "english_transcription", "lang_id"])
 minds_14["train"][0]
 
 labels = minds_14["train"].features["label"].names
@@ -31,8 +31,10 @@ from transformers import AutoFeatureExtractor
 feature_extractor = AutoFeatureExtractor.from_pretrained("facebook/wav2vec2-base")
 
 from datasets import load_dataset, Audio
+
 minds_14 = minds_14.cast_column("audio", Audio(sampling_rate=16_000))
 minds_14["train"][0]
+
 
 def preprocess_function(examples):
     audio_arrays = [x["array"] for x in examples["audio"]]
@@ -40,6 +42,8 @@ def preprocess_function(examples):
         audio_arrays, sampling_rate=feature_extractor.sampling_rate, max_length=16000, truncation=True
     )
     return inputs
+
+
 encoded_minds = minds_14.map(preprocess_function, remove_columns="audio", batched=True)
 # encoded_minds = encoded_minds.rename_column("intent_class", "label")
 
@@ -54,6 +58,7 @@ def compute_metrics(eval_pred):
     predictions = np.argmax(eval_pred.predictions, axis=1)
     return accuracy.compute(predictions=predictions, references=eval_pred.label_ids)
 
+
 from transformers import AutoModelForAudioClassification, TrainingArguments, Trainer
 
 num_labels = len(id2label)
@@ -63,7 +68,7 @@ model = AutoModelForAudioClassification.from_pretrained(
 
 num_labels = len(id2label)
 model = AutoModelForAudioClassification.from_pretrained(
-   "facebook/wav2vec2-base",
+    "facebook/wav2vec2-base",
     num_labels=num_labels,
     label2id=label2id,
     id2label=id2label,

@@ -35,7 +35,6 @@ print(
     ]
 )
 
-
 for model in ["base", "small", "medium", "large-v2", "large-v3"]:
     print(f"\t\t{model}\n\n:")
     # tokenizer = WhisperTokenizer.from_pretrained(f"openai/whisper-{model}", language="persian", task="transcribe")

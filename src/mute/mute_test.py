@@ -25,7 +25,7 @@ path = "/home/makhataei/Projects/stt/test/QC/4539195.wav"
 model = Mossformer2Wrapper.from_pretrained(f'alibabasglab/mossformer2-librimix-2spk')
 
 
-def voice_indexer(path,top):
+def voice_indexer(path, top):
     zaza, sample_rate = model.reformer(path)
     voice = {}
     for i in range(zaza.shape[2]):
@@ -34,15 +34,17 @@ def voice_indexer(path,top):
         index_seconds = (index / 8000).tolist()
         voice[i] = index_seconds
     return voice
+
+
 # a= voice_indexer(path,10)
 
 
-PATH="/home/makhataei/Projects/stt/test/QC"
+PATH = "/home/makhataei/Projects/stt/test/QC"
 a = os.listdir(PATH)
 
 for file in a:
-    for top in [5,10,20,40,60]:
-        rep=voice_indexer(f"{PATH}/{file}",top)
+    for top in [5, 10, 20, 40, 60]:
+        rep = voice_indexer(f"{PATH}/{file}", top)
         with open("indexer.csv", "a") as fileee:
             fileee.writelines(
                 f"{file} - {top}db: \n \t {rep} \n"

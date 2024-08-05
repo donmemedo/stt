@@ -27,8 +27,8 @@ def get_model():
     return model
 
 
-def get_models(path,typo):
-    checkpoint_path = path#"SER_densenet203.pt"
+def get_models(path, typo):
+    checkpoint_path = path  # "SER_densenet203.pt"
     if typo == 201:
         model = models.densenet201(pretrained=True)
         model.classifier = nn.Sequential(

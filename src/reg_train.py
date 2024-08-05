@@ -1,18 +1,18 @@
-from datasets import Dataset
-import os
 # from src.ser.inference import prediction
 import librosa
-import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
+import numpy as np
 import os
+import os
+import pandas as pd
+from datasets import Dataset
 
 # os.environ['CUDA_LAUNCH_BLOCKING']="1"
 # os.environ['TORCH_USE_CUDA_DSA'] = "1"
 
-PATH = "/media/makhataei/Backups/555/"#/home/makhataei/Projects/CallCanterQC/datasets/DushaEmotionAudio"
+PATH = "/media/makhataei/Backups/555/"  # /home/makhataei/Projects/CallCanterQC/datasets/DushaEmotionAudio"
 train_df = pd.read_csv("/home/makhataei/Projects/CallCanterQC/src/ser/tester.csv", on_bad_lines='skip')
-a=train_df.values
+a = train_df.values
 #
 # for file in a:
 #     with open(f'testoor.csv', 'a') as fileee:
@@ -22,7 +22,8 @@ a=train_df.values
 
 import torch, gc, random, datasets
 from transformers.file_utils import is_tf_available, is_torch_available
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, AutoFeatureExtractor,AutoModelForAudioClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, \
+    AutoFeatureExtractor, AutoModelForAudioClassification
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_squared_error, mean_absolute_error
 import pandas as pd
@@ -31,13 +32,10 @@ import numpy as np
 model_name = "anantoj/wav2vec2-adult-child-cls"
 model_name = "facebook/wav2vec2-base"
 
-
 df = pd.read_csv("/home/makhataei/Projects/CallCanterQC/src/ser/testoor.csv", on_bad_lines="skip")
 msk = np.random.rand(len(df)) < 0.9
 train_df = df[msk]
 test_df = df[~msk]
-
-
 
 # train_df = pd.read_csv(
 #     "/home/makhataei/Projects/CallCanterQC/src/ser/testoor.csv", on_bad_lines="skip"
@@ -55,7 +53,6 @@ test_df["audio"] = audio2
 train_dataset = Dataset.from_pandas(train_df)
 test_dataset = Dataset.from_pandas(test_df)
 
-
 # Make data
 # X = train_df.audio
 # y = train_df.label
@@ -67,12 +64,13 @@ test_dataset = Dataset.from_pandas(test_df)
 # Call the Tokenizer
 feature_extractor = AutoFeatureExtractor.from_pretrained(model_name)
 
+
 def prepare_dataset(examples):
     # compute log-Mel input features from input audio array
     audio = examples["audio"]
     examples["input_values"] = feature_extractor(
         audio, sampling_rate=16000, max_length=480000
-    ).data['input_values']#.input_features[0]
+    ).data['input_values']  # .input_features[0]
     del examples["audio"]
     # sentences = examples["sentence"]
     # # encode target text to label ids
@@ -85,8 +83,6 @@ train_dataset = train_dataset.map(prepare_dataset, num_proc=1)
 test_dataset = test_dataset.map(prepare_dataset, num_proc=1)
 
 
-
-
 def preprocess_function(examples):
     # audio_arrays = [x["array"] for x in examples["audio"]]
     # audio_arrays = [examples["audio"]]
@@ -97,6 +93,8 @@ def preprocess_function(examples):
         truncation=True,
     )
     return inputs
+
+
 # train_encodings = preprocess_function(X_train)
 # valid_encodings = preprocess_function(X_test)
 
@@ -128,7 +126,7 @@ class MakeTorchData(torch.utils.data.Dataset):
 # valid_dataset = MakeTorchData(valid_encodings, y_test.ravel())
 
 model = AutoModelForAudioClassification.from_pretrained(model_name,
-                                                           num_labels=1).to("cuda")
+                                                        num_labels=1).to("cuda")
 
 
 def compute_metrics_for_regression(eval_pred):

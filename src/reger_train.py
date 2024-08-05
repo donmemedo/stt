@@ -1,8 +1,7 @@
-from transformers import TrainingArguments, AutoConfig
-
 from training.metrics import compute_metrics
 from training.model import DataCollatorCTCWithPadding, Wav2Vec2ForSpeechClassification, CTCTrainer
 from training.preprocess import encoded_dusha, num_labels, label2id, id2label, processor
+from transformers import TrainingArguments, AutoConfig
 
 config = AutoConfig.from_pretrained(
     "lighteternal/wav2vec2-large-xlsr-53-greek",

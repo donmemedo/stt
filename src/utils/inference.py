@@ -11,8 +11,8 @@ class_names = [
     # "disgust",
 ]
 model = get_model()
-model121 = get_models('models/SER_densenet121.pt',121)
-model201 = get_models('models/SER_densenet201.pt',201)
+model121 = get_models('models/SER_densenet121.pt', 121)
+model201 = get_models('models/SER_densenet201.pt', 201)
 
 
 def prediction(image_bytes):
@@ -23,6 +23,8 @@ def prediction(image_bytes):
     emotion = class_names[category]
 
     return emotion
+
+
 def prediction201(image_bytes):
     tensor = get_tensor(image_bytes)
     outputs = model201(tensor)
@@ -31,6 +33,8 @@ def prediction201(image_bytes):
     emotion = class_names[category]
 
     return emotion
+
+
 def prediction121(image_bytes):
     tensor = get_tensor(image_bytes)
     outputs = model121(tensor)
@@ -39,7 +43,9 @@ def prediction121(image_bytes):
     emotion = class_names[category]
 
     return emotion
-def predicto(model_type,image_bytes):
+
+
+def predicto(model_type, image_bytes):
     tensor = get_tensor(image_bytes)
     if model_type == '121':
         outputs = model121(tensor)

@@ -21,9 +21,9 @@ from transformers import (
 from src.config import settings, whispers
 from src.gender.gender_classifier import gender_predict
 from src.logger import logger
-from src.mute.mute_finder import percentage_mute_finder, trancripter, gender_classification, \
-    whisper_large_v3_trancripter, swallow_detection, emotion_detection
-from src.utils.pred import predict_ser
+from src.mute.mute_finder import percentage_mute_finder, trancripter
+from src.utils.inference import prediction, prediction121, prediction201, predicto
+from src.utils.pred import predict_ser, predict2_ser
 
 app = FastAPI(
     version=settings.VERSION,
@@ -144,187 +144,8 @@ async def speech_to_text(file: UploadFile):
             return JSONResponse(status_code=400, content={"error": str(e)})
 
 
-@app.post("/stt/local-scripts", tags=["STT"])
-async def local_scripts(file: UploadFile):
-    if not file:
-        return JSONResponse(status_code=400, content={"message": "No file sent"})
-    else:
-        try:
-            input_voice = file.file.read()
-            # Create a directory named with today's date
-            date_today = jd.now().strftime("%Y-%m-%d")
-            directory = f"./stt_uploads/chats/{date_today}"
-
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-
-            # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime("%H%M%S%f")
-            filename = f"{date_time_now}_{file.filename}"
-            file_location = f"{directory}/{filename}"
-            with open(file_location, "wb+") as file_object:
-                file_object.write(input_voice)
-            AUDIO = (
-                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
-                    / 32768.0
-            )
-            start = int(1000 * time.time())
-            result = trancripter(file_location, whispers[1])
-            end = int(1000 * time.time())
-            response = (
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            result = {
-                "Transcript": result[1],
-                "Transcript Log": response,
-                "File Size": len(AUDIO),
-                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
-            }
-            return JSONResponse(status_code=200, content=result)
-        except Exception as e:
-            return JSONResponse(status_code=400, content={"error": str(e)})
-
-
-@app.post("/stt/api-scripts", tags=["STT"])
-async def api_scripts(file: UploadFile):
-    if not file:
-        return JSONResponse(status_code=400, content={"message": "No file sent"})
-    else:
-        try:
-            input_voice = file.file.read()
-            # Create a directory named with today's date
-            date_today = jd.now().strftime("%Y-%m-%d")
-            directory = f"./stt_uploads/scripts/{date_today}"
-
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-
-            # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime("%H%M%S%f")
-            filename = f"{date_time_now}_{file.filename}"
-            file_location = f"{directory}/{filename}"
-            with open(file_location, "wb+") as file_object:
-                file_object.write(input_voice)
-            AUDIO = (
-                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
-                    / 32768.0
-            )
-            start = int(1000 * time.time())
-            result = whisper_large_v3_trancripter(file_location)
-            end = int(1000 * time.time())
-            response = (
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            result = {
-                "First Transcript": result[1][0],
-                "Second Transcript": result[1][1],
-                "Transcript Log": response,
-                "File Size": len(AUDIO),
-                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
-            }
-            return JSONResponse(status_code=200, content=result)
-        except Exception as e:
-            return JSONResponse(status_code=400, content={"error": str(e)})
-
-
-@app.post("/gender/classification", tags=["GENDER"])
-async def speech_to_text(file: UploadFile):
-    if not file:
-        return JSONResponse(status_code=400, content={"message": "No file sent"})
-    else:
-        try:
-            input_voice = file.file.read()
-            # Create a directory named with today's date
-            date_today = jd.now().strftime("%Y-%m-%d")
-            directory = f"./gender_uploads/seps/{date_today}"
-
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-
-            # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime("%H%M%S%f")
-            filename = f"{date_time_now}_{file.filename}"
-            file_location = f"{directory}/{filename}"
-            with open(file_location, "wb+") as file_object:
-                file_object.write(input_voice)
-            AUDIO = (
-                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
-                    / 32768.0
-            )
-            start = int(1000 * time.time())
-            result = gender_classification(file_location)
-            end = int(1000 * time.time())
-            response = (
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            result = {
-                "Operator": result[1][0],
-                "Customer": result[1][1],
-                "Transcript Log": response,
-                "File Size": len(AUDIO),
-                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
-            }
-            return JSONResponse(status_code=200, content=result)
-        except Exception as e:
-            return JSONResponse(status_code=400, content={"error": str(e)})
-
-
-@app.post("/swallow", tags=["Swallow"])
-async def swallow(file: UploadFile):
-    if not file:
-        return JSONResponse(status_code=400, content={"message": "No file sent"})
-    else:
-        try:
-            input_voice = file.file.read()
-            # Create a directory named with today's date
-            date_today = jd.now().strftime("%Y-%m-%d")
-            directory = f"./swallow_uploads/{date_today}"
-
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-
-            # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime("%H%M%S%f")
-            filename = f"{date_time_now}_{file.filename}"
-            file_location = f"{directory}/{filename}"
-            with open(file_location, "wb+") as file_object:
-                file_object.write(input_voice)
-            AUDIO = (
-                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
-                    / 32768.0
-            )
-            start = int(1000 * time.time())
-            result = swallow_detection(file_location)
-            end = int(1000 * time.time())
-            response = (
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            result = {
-                "Operator": result[1][0],
-                "Customer": result[1][1],
-                "Transcript Log": response,
-                "File Size": len(AUDIO),
-                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
-            }
-            return JSONResponse(status_code=200, content=result)
-        except Exception as e:
-            return JSONResponse(status_code=400, content={"error": str(e)})
-
-
-@app.post("/emotion/one", tags=["EMOTION"])
-async def emotion_two(file: UploadFile):
+@app.post("/ser/response", tags=["SER"])
+async def speech_emotion_recognition(file: UploadFile):
     if not file:
         return JSONResponse(status_code=400, content={"message": "No file sent"})
     else:
@@ -343,90 +164,194 @@ async def emotion_two(file: UploadFile):
             file_location = f"{directory}/{filename}"
             with open(file_location, "wb+") as file_object:
                 file_object.write(input_voice)
+            response = {}
             AUDIO = (
                     np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
                     / 32768.0
             )
             start = int(1000 * time.time())
-            result = predict_ser(file_location)
+            emotion = prediction(image_bytes=input_voice)
             end = int(1000 * time.time())
-            response = (
-                f"inference time is {end - start} milliseconds: \n {result}"
-            )
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {result}"
-            )
+            response = f"inference time is {end - start} milliseconds: \n {emotion}"
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
+            result = {
+                "Transcript": emotion,
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
 
+
+@app.post("/ser/response121", tags=["TEMP"])
+# @app.post("/ser/response121", tags=["SER"])
+async def speech_emotion_recognition121(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            response = {}
+            AUDIO = (
+                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                    / 32768.0
+            )
+            start = int(1000 * time.time())
+            emotion = prediction121(image_bytes=input_voice)
+            end = int(1000 * time.time())
+            response = f"inference time is {end - start} milliseconds: \n {emotion}"
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
+            result = {
+                "Transcript": emotion,
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/response201", tags=["TEMP"])
+# @app.post("/ser/response201", tags=["SER"])
+async def speech_emotion_recognition201(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            response = {}
+            AUDIO = (
+                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                    / 32768.0
+            )
+            start = int(1000 * time.time())
+            emotion = prediction201(image_bytes=input_voice)
+            end = int(1000 * time.time())
+            response = f"inference time is {end - start} milliseconds: \n {emotion}"
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
+            result = {
+                "Transcript": emotion,
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/responseAll", tags=["TEMP"])
+# @app.post("/ser/responseAll", tags=["SER"])
+async def speech_emotion_recognitionAll(file: UploadFile, model_type):
+    if model_type == '121' or model_type == '201':
+        pass
+    else:
+        return JSONResponse(status_code=400, content={"message": "You MUST choose 121 or 201"})
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            response = {}
+            AUDIO = (
+                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
+                    / 32768.0
+            )
+            start = int(1000 * time.time())
+            emotion = predicto(model_type=model_type, image_bytes=input_voice)
+            end = int(1000 * time.time())
+            response = f"inference time is {end - start} milliseconds: \n {emotion}"
+            logger.info(f"inference time is {end - start} milliseconds: \n {emotion}")
+            result = {
+                "Transcript": emotion,
+                "Transcript Log": response,
+                "File Size": len(AUDIO),
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/KELONMYOSA", tags=["SER"])
+async def kelonmyosa(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            start = int(1000 * time.time())
+            response = predict_ser(file_location)
             pred = {"label": None, "score": 0}
-            for zico in result:
+            for zico in response:
                 if zico["score"] > pred["score"]:
                     pred["label"] = zico["label"]
                     pred["score"] = zico["score"]
                 zico["score"] = int(zico["score"] * 10000) / 100
-            result = {
-                "Operator": pred["label"],  # result[1][0],
-                "Transcript Log": response,
-                "File Size": len(AUDIO),
-                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
-            }
-            return JSONResponse(status_code=200, content=result)
-        except Exception as e:
-            return JSONResponse(status_code=400, content={"error": str(e)})
 
-
-@app.post("/emotion/two", tags=["EMOTION"])
-async def emotion_two(file: UploadFile):
-    if not file:
-        return JSONResponse(status_code=400, content={"message": "No file sent"})
-    else:
-        try:
-            input_voice = file.file.read()
-            # Create a directory named with today's date
-            date_today = jd.now().strftime("%Y-%m-%d")
-            directory = f"./ser_uploads/{date_today}"
-
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-
-            # Save the file with the date and time included in the filename
-            date_time_now = jd.now().strftime("%H%M%S%f")
-            filename = f"{date_time_now}_{file.filename}"
-            file_location = f"{directory}/{filename}"
-            with open(file_location, "wb+") as file_object:
-                file_object.write(input_voice)
-            AUDIO = (
-                    np.frombuffer(input_voice, np.int8).flatten().astype(np.float32)
-                    / 32768.0
-            )
-            start = int(1000 * time.time())
-            result = emotion_detection(file_location)
+            logger.info(response)
             end = int(1000 * time.time())
-            response = (
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-            logger.info(
-                f"inference time is {end - start} milliseconds: \n {result[1]}"
-            )
-
-            operator_pred = {"label": None, "score": 0}
-            for zico in result[1][0]:
-                if zico["score"] > operator_pred["score"]:
-                    operator_pred["label"] = zico["label"]
-                    operator_pred["score"] = zico["score"]
-                zico["score"] = int(zico["score"] * 10000) / 100
-
-            customer_pred = {"label": None, "score": 0}
-            for zico in result[1][1]:
-                if zico["score"] > customer_pred["score"]:
-                    customer_pred["label"] = zico["label"]
-                    customer_pred["score"] = zico["score"]
-                zico["score"] = int(zico["score"] * 10000) / 100
-
+            logger.info(f"inference time is {end - start} milliseconds: \n {pred['label']}")
             result = {
-                "Operator": operator_pred["label"],  # result[1][0],
-                "Customer": customer_pred["label"],  # result[1][1],
+                "Label": pred['label'],
+                "Score": int(pred['score'] * 10000) / 100,
                 "Transcript Log": response,
-                "File Size": len(AUDIO),
+                "Inference Log": f"{end - start} milliseconds",
                 "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
             }
             return JSONResponse(status_code=200, content=result)
@@ -470,6 +395,86 @@ async def gender(file: UploadFile):
                 "Score": pred['score'],
                 "Transcript Log": response,
                 "Inference Log": f"{end - start} milliseconds",
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/ehcalabres", tags=["SER"])
+async def ehcalabres(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            start = int(1000 * time.time())
+            response = predict2_ser(file_location)
+            pred = {"label": None, "score": 0}
+            for zico in response:
+                if zico["score"] > pred["score"]:
+                    pred["label"] = zico["label"]
+                    pred["score"] = zico["score"]
+                zico["score"] = int(zico["score"] * 10000) / 100
+
+            logger.info(response)
+            end = int(1000 * time.time())
+            logger.info(f"inference time is {end - start} milliseconds: \n {pred['label']}")
+            result = {
+                "Label": pred['label'],
+                "Score": int(pred['score'] * 10000) / 100,
+                "Transcript Log": response,
+                "Inference Log": f"{end - start} milliseconds",
+                "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+            }
+            return JSONResponse(status_code=200, content=result)
+        except Exception as e:
+            return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+@app.post("/ser/Emotion", tags=["TEMP"])
+# @app.post("/ser/Emotion", tags=["SER"])
+async def adultchild(file: UploadFile):
+    if not file:
+        return JSONResponse(status_code=400, content={"message": "No file sent"})
+    else:
+        try:
+            API_URL = "https://api-inference.huggingface.co/models/anantoj/wav2vec2-adult-child-cls"
+            headers = {"Authorization": "Bearer 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"}
+            input_voice = file.file.read()
+            # Create a directory named with today's date
+            date_today = jd.now().strftime("%Y-%m-%d")
+            directory = f"./ser_uploads/{date_today}"
+
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            # Save the file with the date and time included in the filename
+            date_time_now = jd.now().strftime("%H%M%S%f")
+            filename = f"{date_time_now}_{file.filename}"
+            file_location = f"{directory}/{filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(input_voice)
+            response = requests.post(API_URL, headers=headers, data=input_voice).json()
+            start = int(1000 * time.time())
+            end = int(1000 * time.time())
+            result = {
+                "Score": int(response[0]['score'] * 100),
+                "Transcript Log": response,
                 "timeGenerated": jd.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
             }
             return JSONResponse(status_code=200, content=result)
@@ -523,6 +528,8 @@ async def mute_finder(file: UploadFile, mo_db_sensitivity: float, mute_time_sens
 
             # Save the file with the date and time included in the filename
             date_time_now = jd.now().strftime("%H%M%S%f")
+            # if file.filename.split('.')[1] != 'wav':
+            #     return JSONResponse(status_code=412, content={"message": "You must send a WAV file."})
             filename = f"{date_time_now}_{file.filename}"
             file_location = f"{directory}/{filename}"
             with open(file_location, "wb+") as file_object:

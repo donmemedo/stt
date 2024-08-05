@@ -3,13 +3,13 @@ services:
   chatbot:
     image: chatbotbak:latest
     network_mode: host
-#    networks:
-#      - omsnet
-#    ports:
-#      - 9040:80
+    #    networks:
+    #      - omsnet
+    #    ports:
+    #      - 9040:80
     deploy:
       mode: replicated
-      replicas: 1    
+      replicas: 1
       update_config:
         parallelism: 1
         delay: 1s

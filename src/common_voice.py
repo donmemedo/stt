@@ -1,10 +1,9 @@
 """ Common Voice Dataset"""
 
 import csv
+import datasets
 import json
 import os
-
-import datasets
 from datasets.utils.py_utils import size_str
 from tqdm import tqdm
 

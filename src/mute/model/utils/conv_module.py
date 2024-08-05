@@ -1,17 +1,20 @@
 import torch
 import torch.nn as nn
-from torch import Tensor
-import torch.nn.init as init
 import torch.nn.functional as F
+import torch.nn.init as init
+from torch import Tensor
+
 
 class Transpose(nn.Module):
     """ Wrapper class of torch.transpose() for Sequential module. """
+
     def __init__(self, shape: tuple):
         super(Transpose, self).__init__()
         self.shape = shape
 
     def forward(self, x: Tensor) -> Tensor:
         return x.transpose(*self.shape)
+
 
 class DepthwiseConv1d(nn.Module):
     """
@@ -29,6 +32,7 @@ class DepthwiseConv1d(nn.Module):
     Returns: outputs
         - **outputs** (batch, out_channels, time): Tensor produces by depthwise 1-D convolution.
     """
+
     def __init__(
             self,
             in_channels: int,
@@ -53,6 +57,7 @@ class DepthwiseConv1d(nn.Module):
     def forward(self, inputs: Tensor) -> Tensor:
         return self.conv(inputs)
 
+
 class ConvModule(nn.Module):
     """
     Conformer convolution module starts with a pointwise convolution and a gated linear unit (GLU).
@@ -67,6 +72,7 @@ class ConvModule(nn.Module):
     Outputs: outputs
         outputs (batch, time, dim): Tensor produces by conformer convolution module.
     """
+
     def __init__(
             self,
             in_channels: int,

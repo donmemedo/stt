@@ -37,4 +37,4 @@ words_info = result.alternatives[0].words
 # Printing out the output:
 for word_info in words_info:
     print(f"word: '{word_info.word}', speaker_tag: {word_info.speaker_tag}")
-    return result
+# return result

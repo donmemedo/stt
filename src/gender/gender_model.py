@@ -1,14 +1,13 @@
 import torch
 import torch.nn as nn
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
-
-from transformers.models.wav2vec2.modeling_wav2vec2 import (
-    Wav2Vec2PreTrainedModel,
-    Wav2Vec2Model
-)
 from transformers.models.hubert.modeling_hubert import (
     HubertPreTrainedModel,
     HubertModel
+)
+from transformers.models.wav2vec2.modeling_wav2vec2 import (
+    Wav2Vec2PreTrainedModel,
+    Wav2Vec2Model
 )
 
 from src.gender.modeling_outputs import SpeechClassifierOutput
